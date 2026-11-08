@@ -93,3 +93,31 @@
 #beginJourney:hover{transform:translate(-50%,-50%);box-shadow:0 0 0 3px #ffd36b88,0 0 35px #ffc45b88;background:#ffcf5b12}
 #beginJourney:focus-visible{outline:3px solid #ffe19a;outline-offset:4px}
 @media(max-width:650px){#beginJourney{top:82%;width:78%;height:11%;min-width:0}}
+
+
+/* Fix the real welcome CTA: keep it visible above the artwork */
+.landing-copy{display:contents!important}
+#beginJourney{
+  display:flex!important;align-items:center;justify-content:center;gap:16px;
+  position:absolute;z-index:20;left:50%;top:81%;transform:translate(-50%,-50%);
+  width:min(470px,76vw);height:auto;min-height:66px;max-width:80vw;
+  padding:16px 24px;border:2px solid #ffe08a;border-radius:16px;
+  background:linear-gradient(110deg,#7b180eF2,#3b100df2 60%,#8b2b0cF2);
+  color:#fff0bd;font:700 clamp(13px,2vw,19px) 'Cinzel',serif;letter-spacing:.04em;
+  text-shadow:0 1px 5px #250800;box-shadow:0 0 0 3px #ffb52b55,0 0 30px #ffb52b99,inset 0 0 18px #ffb52b33;
+  cursor:pointer;animation:ctaGlow 2s ease-in-out infinite;
+}
+#beginJourney span{opacity:1!important}
+#beginJourney b{opacity:1!important;font-size:25px;color:#ffd45f}
+#beginJourney:hover{transform:translate(-50%,-50%) scale(1.04);background:linear-gradient(110deg,#a62b10,#5a170b)}
+#beginJourney:focus-visible{outline:3px solid #fff1b7;outline-offset:5px}
+@keyframes ctaGlow{0%,100%{box-shadow:0 0 0 2px #ffb52b44,0 0 22px #ffb52b77,inset 0 0 18px #ffb52b22}50%{box-shadow:0 0 0 4px #ffdf8055,0 0 42px #ffca45dd,inset 0 0 25px #ffb52b55}}
+/* Animated sky rockets and bursting fireworks over the Ayodhya artwork */
+.firework{display:block!important;z-index:4;width:150px;height:150px;opacity:0;pointer-events:none}
+.firework:before{background:repeating-conic-gradient(from 0deg,transparent 0deg 5deg,#ffe7a1 6deg 7deg,transparent 8deg 15deg,#ff8b54 16deg 17deg,transparent 18deg 30deg);mask:radial-gradient(circle,transparent 0 8%,#000 12% 62%,transparent 68%)}
+.firework:after{background:repeating-conic-gradient(#ffcf65 0deg 1deg,transparent 2deg 17deg);mask:radial-gradient(circle,transparent 0 5%,#000 9% 50%,transparent 58%)}
+.fw-one{top:8%;right:25%;animation:skyBurst 4.2s ease-out infinite}
+.fw-two{top:15%;right:7%;animation:skyBurst 4.8s 1.4s ease-out infinite}
+.fw-three{top:5%;left:39%;animation:skyBurst 4.5s 2.7s ease-out infinite}
+@keyframes skyBurst{0%,8%{opacity:0;transform:translateY(70px) scale(.08)}13%{opacity:1;transform:translateY(0) scale(.22)}23%{opacity:1;transform:translateY(0) scale(1)}44%{opacity:.8;transform:translateY(0) scale(1.35)}62%,100%{opacity:0;transform:translateY(0) scale(1.7)}}
+@media(max-width:650px){#beginJourney{top:82%;width:78vw;min-height:54px;padding:12px 15px;font-size:13px}.firework{width:92px;height:92px}}
