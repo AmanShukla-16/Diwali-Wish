@@ -183,6 +183,11 @@ for(let i=0;i<96;i++){const side=i%2?1:-1,row=Math.floor(i/2),z=3-row*1.65,x=sid
 
 let started=false,locked=false,move={w:false,a:false,s:false,d:false,arrowup:false,arrowdown:false,arrowleft:false,arrowright:false},yaw=0,pitch=0,soundOn=false,audioCtx=null,osc=null;
 const intro=document.querySelector('#intro'),hud=document.querySelector('#hud'),welcome=document.querySelector('#welcome'),cross=document.querySelector('#crosshair'),wish=document.querySelector('#wish'),enter=document.querySelector('#enter');
+const landing=document.querySelector('#landing');
+document.querySelector('#beginJourney').addEventListener('click',()=>{
+ landing.classList.add('landing-exit');
+ setTimeout(()=>{landing.style.display='none';enter.click()},650);
+});
 enter.addEventListener('click',()=>{started=true;intro.classList.add('hidden');hud.classList.remove('hidden');welcome.classList.remove('hidden');document.querySelector('#movePad').classList.remove('hidden');if(matchMedia('(pointer: coarse)').matches)document.querySelector('#mobileTip').classList.remove('hidden');canvas.requestPointerLock?.()});
 document.addEventListener('pointerlockchange',()=>{locked=document.pointerLockElement===canvas;cross.classList.toggle('hidden',!locked)});
 document.addEventListener('mousemove',e=>{if(!locked)return;yaw-=e.movementX*.0022;pitch=THREE.MathUtils.clamp(pitch-e.movementY*.0018,-1.15,1.15)});
