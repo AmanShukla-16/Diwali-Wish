@@ -150,8 +150,8 @@ function makeVanara(x,z,index){
  const tailCurve=new THREE.CatmullRomCurve3([new THREE.Vector3(0,.35,-.12),new THREE.Vector3(-.2,.05,-.45),new THREE.Vector3(-.38,.42,-.7),new THREE.Vector3(-.18,.72,-.82)]);
  const tail=new THREE.Mesh(new THREE.TubeGeometry(tailCurve,12,.055,6,false),fur);g.add(tail);vanaraWalkers.push({g,arms,phase:index*.8,tail});return g;
 }
-for(let row=0;row<4;row++)for(const side of [-1,1])makeVanara(side*(3.65+(row%2)*.35),-(1.8+row*2.05),row+(side===1?4:0));
-const hanuman=new THREE.Group();hanuman.position.set(-3.25,0,-1.1);vanaraSena.add(hanuman);
+for(let row=0;row<4;row++)for(const side of [-1,1])makeVanara(side*(3.65+(row%2)*.35),1.8+row*2.05,row+(side===1?4:0));
+const hanuman=new THREE.Group();hanuman.position.set(-3.25,0,1.1);vanaraSena.add(hanuman);
 const hanumanFur=mat(0x9a5937),hanumanCloth=mat(0xd56c2e),hanumanGold=mat(0xe6bd65,.35,.5);
 const hBody=new THREE.Mesh(new THREE.CylinderGeometry(.34,.48,1.45,12),hanumanCloth);hBody.position.y=1.05;hanuman.add(hBody);
 const hChest=new THREE.Mesh(new THREE.SphereGeometry(.38,12,10),hanumanFur);hChest.position.set(0,1.82,0);hChest.scale.set(.9,1.05,.75);hanuman.add(hChest);
