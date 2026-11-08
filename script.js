@@ -185,8 +185,14 @@ let started=false,locked=false,move={w:false,a:false,s:false,d:false,arrowup:fal
 const intro=document.querySelector('#intro'),hud=document.querySelector('#hud'),welcome=document.querySelector('#welcome'),cross=document.querySelector('#crosshair'),wish=document.querySelector('#wish'),enter=document.querySelector('#enter');
 const landing=document.querySelector('#landing');
 document.querySelector('#beginJourney').addEventListener('click',()=>{
+ const startButton=document.querySelector('#beginJourney');
+ if(startButton.disabled) return;
+ startButton.disabled=true;
  landing.classList.add('landing-exit');
- setTimeout(()=>{landing.style.display='none';enter.click()},650);
+ window.setTimeout(()=>{
+   landing.style.display='none';
+   enter.click();
+ },650);
 });
 enter.addEventListener('click',()=>{started=true;intro.classList.add('hidden');hud.classList.remove('hidden');welcome.classList.remove('hidden');document.querySelector('#movePad').classList.remove('hidden');if(matchMedia('(pointer: coarse)').matches)document.querySelector('#mobileTip').classList.remove('hidden');canvas.requestPointerLock?.()});
 document.addEventListener('pointerlockchange',()=>{locked=document.pointerLockElement===canvas;cross.classList.toggle('hidden',!locked)});
