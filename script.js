@@ -36,11 +36,62 @@ for(let side of [-1,1])for(let i=0;i<12;i++){
  box(1.15,2.1,.12,dark,x,1.05,z-3.58);
  const fin=new THREE.Mesh(new THREE.ConeGeometry(.7,.85,4),gold);fin.position.set(x,5.5,z);fin.rotation.y=Math.PI/4;scene.add(fin);
 }
-const palace=new THREE.Group();scene.add(palace);palace.position.set(0,0,-72);
-box(20,8,8,wall,0,4,0,palace);box(22,.35,9,gold,0,8,0,palace);
-for(let i=-2;i<=2;i++){const c=new THREE.Mesh(new THREE.CylinderGeometry(.35,.48,6,12),gold);c.position.set(i*3.7,3,4.2);palace.add(c)}
-for(let i=-2;i<=2;i++){const t=new THREE.Mesh(new THREE.ConeGeometry(2.5,4,4),roof);t.position.set(i*4,10,0);t.rotation.y=Math.PI/4;palace.add(t)}
-const dome=new THREE.Mesh(new THREE.SphereGeometry(2.1,24,16,0,Math.PI*2,0,Math.PI/2),gold);dome.position.set(0,8.2,0);palace.add(dome);box(2.8,4,.2,dark,0,2,4.12,palace);
+// Grand fortified Ayodhya palace: open central gateway, long walls and domed towers.
+const castle=new THREE.Group();scene.add(castle);castle.position.set(0,0,-88);
+const castleStone=mat(0xb58a61),castleLight=mat(0xd6b27d),castleRoof=mat(0x743d36),castleShadow=mat(0x261a27),castleGold=mat(0xe7bd68,.38,.5);
+// Long fortified wings leave a wide central entrance completely open.
+box(18,8,2.2,castleStone,-14,4,0,castle);
+box(18,8,2.2,castleStone,14,4,0,castle);
+for(const side of [-1,1]){
+ const x=side*14;
+ box(18.4,.28,2.5,castleGold,x,8.12,0,castle);
+ for(let j=0;j<9;j++)box(1.15,1.05,2.35,castleLight,x-side*8.2+j*2.05,8.65,0,castle);
+ // Tall corner towers with layered balconies and red roofs.
+ for(const tx of [side*6.2,side*21.8]){
+  const tower=new THREE.Group();tower.position.set(tx,0,0);castle.add(tower);
+  const shaft=new THREE.Mesh(new THREE.CylinderGeometry(2.05,2.45,15,12),castleLight);shaft.position.y=7.5;tower.add(shaft);
+  const band=new THREE.Mesh(new THREE.CylinderGeometry(2.35,2.35,.45,12),castleGold);band.position.y=13.1;tower.add(band);
+  const roofCap=new THREE.Mesh(new THREE.ConeGeometry(2.65,4.5,8),castleRoof);roofCap.position.y=16.9;tower.add(roofCap);
+  const finial=new THREE.Mesh(new THREE.SphereGeometry(.32,10,8),castleGold);finial.position.y=19.2;tower.add(finial);
+  for(let k=0;k<4;k++){const slit=box(.28,1.8,.08,castleShadow,tx+(k-1.5)*.72,8.3,1.98,tower);slit.position.x=(k-1.5)*.72;}
+ }
+}
+// Monumental gateway pillars and a golden semicircular arch framing the procession.
+for(const x of [-5.1,5.1]){
+ box(1.45,8.6,2.8,castleLight,x,4.3,0,castle);
+ box(2.1,.35,3.3,castleGold,x,8.65,0,castle);
+ for(let k=0;k<3;k++)box(.18,6.8,.12,castleGold,x+(k-1)*.42,4.2,1.43,castle);
+}
+const arch=new THREE.Mesh(new THREE.TorusGeometry(4.45,.42,12,48,Math.PI),castleGold);
+arch.position.set(0,4.35,1.48);castle.add(arch);
+const innerArch=new THREE.Mesh(new THREE.TorusGeometry(3.85,.12,8,48,Math.PI),castleLight);
+innerArch.position.set(0,4.35,1.52);castle.add(innerArch);
+// Open ceremonial doors angled outward so the route remains visible.
+for(const side of [-1,1]){
+ const door=new THREE.Group();door.position.set(side*4.35,0,1.65);castle.add(door);
+ const panel=box(1.1,5.4,.28,castleRoof,side*.55,2.7,0,door);
+ for(let y=1;y<5;y+=1.2)box(1.08,.09,.34,castleGold,side*.55,y,0,door);
+ for(let x=.2;x<1;x+=.35)box(.08,5.25,.34,castleGold,side*x,2.7,0,door);
+ door.rotation.y=side*.72;
+}
+// Palace rising behind the gate, with a central dome, smaller domes and balconies.
+const palace=new THREE.Group();castle.add(palace);palace.position.set(0,0,-13);
+box(26,10,9,castleStone,0,5,-1,palace);
+box(28,.45,10,castleGold,0,10,-1,palace);
+for(let i=-3;i<=3;i++){
+ const column=new THREE.Mesh(new THREE.CylinderGeometry(.28,.42,8,12),castleGold);column.position.set(i*3.7,4.2,3.65);palace.add(column);
+}
+for(let i=-2;i<=2;i++){
+ const dome=new THREE.Mesh(new THREE.SphereGeometry(i===0?3.5:2.15,20,14,0,Math.PI*2,0,Math.PI/2),castleGold);
+ dome.position.set(i*5.2,10.2,i===0?-1:-1.5);palace.add(dome);
+ const spire=new THREE.Mesh(new THREE.ConeGeometry(.42,2.2,8),castleRoof);spire.position.set(i*5.2,13.1,i===0?-1:-1.5);palace.add(spire);
+}
+box(4.2,6,.3,castleShadow,0,3,3.62,palace);
+for(let side of [-1,1]){
+ const balcony=box(7,.25,1.1,castleGold,side*8,6,4,palace);
+ for(let j=0;j<7;j++)box(.08,.8,.08,castleGold,side*8-3+j,6.5,4,palace);
+}
+
 
 const lamps=[];
 function addLamp(x,z){
@@ -165,7 +216,7 @@ function animate(){
  travelers.forEach(o=>{o.figure.rotation.z=Math.sin(t*1.35+o.phase)*.018;o.figure.position.y=1.18+Math.sin(t*2+o.phase)*.025});
  vanaraWalkers.forEach(o=>{if(!o.g||!o.arms||o.arms.length<2)return;o.g.position.y=Math.abs(Math.sin(t*3+o.phase))*.045;o.arms[0].rotation.x=Math.sin(t*3+o.phase)*.18;o.arms[1].rotation.x=-.35+Math.sin(t*3+o.phase+1)*.18;o.g.rotation.y=Math.sin(t*1.7+o.phase)*.035});
  hArms[0].rotation.z=-.25+Math.sin(t*2.4)*.12;hArms[1].rotation.z=.18+Math.sin(t*2.4+1)*.1;hanuman.rotation.y=Math.sin(t*1.1)*.035;
- if(processionStarted&&processionProgress<1){processionProgress=Math.min(1,processionProgress+dt*.075);const ease=processionProgress*processionProgress*(3-2*processionProgress);chariot.position.z=-47+29*ease;vanaraSena.position.z=chariot.position.z;chariot.position.y=Math.sin(t*2)*.035;processionGlow.intensity=18+Math.sin(t*5)*3}
+ if(processionStarted&&processionProgress<1){processionProgress=Math.min(1,processionProgress+dt*.075);const ease=processionProgress*processionProgress*(3-2*processionProgress);chariot.position.z=-47-21*ease;vanaraSena.position.z=chariot.position.z;chariot.position.y=Math.sin(t*2)*.035;processionGlow.intensity=18+Math.sin(t*5)*3}
  if(started){if(!processionStarted&&camera.position.z < -22){processionStarted=true;document.querySelector('#returnMoment').classList.remove('hidden');setTimeout(()=>document.querySelector('#returnMoment')?.classList.add('hidden'),6500)}camera.rotation.order='YXZ';camera.rotation.y=yaw;camera.rotation.x=pitch;const forward=new THREE.Vector3(-Math.sin(yaw),0,-Math.cos(yaw)),right=new THREE.Vector3(Math.cos(yaw),0,-Math.sin(yaw)),input=new THREE.Vector3();if(move.w)input.add(forward);if(move.s)input.sub(forward);if(move.d)input.add(right);if(move.a)input.sub(right);if(input.lengthSq())input.normalize();if(!processionStarted||processionProgress>=1)camera.position.addScaledVector(input,dt*5.2);camera.position.x=THREE.MathUtils.clamp(camera.position.x,-5.1,5.1);camera.position.z=THREE.MathUtils.clamp(camera.position.z,-120,12);camera.position.y=2.1;if(camera.position.z < -104){wish.classList.remove('hidden');document.exitPointerLock?.()}}
  renderer.render(scene,camera);
 }
