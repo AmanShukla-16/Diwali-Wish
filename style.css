@@ -146,3 +146,22 @@
  .story-tv{top:5.5%;width:min(88vw,440px);padding:6px 7px 7px}
  .tv-top{height:16px;font-size:7px}.tv-caption{padding-top:5px}.tv-caption h2{font-size:12px}.tv-caption p{font-size:8px}.tv-caption small{font-size:7px}
 }
+
+
+/* Final welcome-screen layout override: keep the story screen visibly fixed at top centre. */
+#landing .story-tv{
+ position:absolute!important;left:50%!important;top:3.5%!important;right:auto!important;
+ transform:translateX(-50%)!important;width:min(470px,44vw)!important;
+ z-index:1000!important;margin:0!important;display:block!important;visibility:visible!important;
+ opacity:1!important;pointer-events:auto!important;
+ padding:8px 10px 9px!important;border:1px solid #d1a45e!important;border-radius:10px!important;
+ background:rgba(12,8,16,.94)!important;box-shadow:0 10px 35px #000d,0 0 20px #f6bd5a55!important;
+}
+#landing .tv-screen{width:100%!important;aspect-ratio:16/9!important;min-height:0!important;overflow:hidden!important;background:#08060c!important}
+#landing .tv-slide img{width:100%!important;height:100%!important;object-fit:contain!important;display:block!important}
+@media(max-width:650px){
+ #landing .story-tv{top:2.5%!important;width:92vw!important;padding:6px 7px 7px!important}
+ #landing .tv-top{height:15px!important}
+ #landing .tv-caption h2{font-size:12px!important}
+ #landing .tv-caption p{font-size:8px!important}
+}
