@@ -188,11 +188,8 @@ document.querySelector('#beginJourney').addEventListener('click',()=>{
  const startButton=document.querySelector('#beginJourney');
  if(startButton.disabled) return;
  startButton.disabled=true;
- landing.classList.add('landing-exit');
- window.setTimeout(()=>{
-   landing.style.display='none';
-   enter.click();
- },650);
+ landing.style.display='none';
+ enter.click();
 });
 enter.addEventListener('click',()=>{started=true;intro.classList.add('hidden');hud.classList.remove('hidden');welcome.classList.remove('hidden');document.querySelector('#movePad').classList.remove('hidden');if(matchMedia('(pointer: coarse)').matches)document.querySelector('#mobileTip').classList.remove('hidden');canvas.requestPointerLock?.()});
 document.addEventListener('pointerlockchange',()=>{locked=document.pointerLockElement===canvas;cross.classList.toggle('hidden',!locked)});
