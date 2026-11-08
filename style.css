@@ -38,9 +38,9 @@
 }
 
 /* Separate public-facing Diwali welcome screen */
-.landing{position:absolute;inset:0;z-index:10;overflow:hidden;background:radial-gradient(ellipse at 70% 45%,#6b2c37 0%,#35172e 42%,#10091d 82%);color:#fff0d0;transition:opacity .65s ease,transform .65s ease}
+.landing{position:absolute;inset:0;z-index:10;overflow:hidden;background:linear-gradient(90deg,rgba(10,6,20,.92) 0%,rgba(18,8,25,.70) 42%,rgba(12,7,20,.38) 100%);color:#fff0d0;transition:opacity .65s ease,transform .65s ease}
 .landing-exit{opacity:0;transform:scale(1.025);pointer-events:none}
-.landing:before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,#10091d 0%,#10091dcf 35%,transparent 75%),radial-gradient(ellipse at 76% 75%,#e5a34b26,transparent 45%);pointer-events:none}
+.landing:before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(9,5,18,.74) 0%,rgba(12,6,20,.36) 48%,rgba(10,5,16,.12) 100%),radial-gradient(ellipse at 76% 75%,#e5a34b26,transparent 45%);pointer-events:none}
 .landing-stars{position:absolute;inset:0;opacity:.5;background-image:radial-gradient(#ffe5aa 1px,transparent 1.5px),radial-gradient(#f7c56e 1px,transparent 1.5px);background-size:83px 83px,127px 127px;background-position:0 0,34px 44px}
 .landing-nav{position:absolute;z-index:2;top:0;left:0;right:0;padding:27px 5vw;display:flex;justify-content:space-between;align-items:center}
 .landing-brand{font:600 16px 'Cinzel',serif;color:#f6d58b;letter-spacing:.16em}.landing-nav-note,.landing-bottom{font-size:9px;letter-spacing:.24em;color:#dfc49a}
@@ -56,7 +56,8 @@
 .journey-button:hover{transform:translateY(-3px);box-shadow:0 0 45px #f2c56e99}.journey-button b{font-size:20px;font-weight:400}
 .landing-invite{max-width:360px;color:#d9c4a4;font-size:12px;line-height:1.6;margin:14px 0 0}
 .landing-art{align-self:center;justify-self:center;width:100%;max-width:760px;filter:drop-shadow(0 18px 55px #f0a44b22);animation:artFloat 7s ease-in-out infinite}
-.landing-art svg{display:block;width:100%;height:auto;overflow:visible}
+.landing-art img{display:block;width:100%;height:auto;max-height:76vh;object-fit:contain;border-radius:8px;filter:drop-shadow(0 18px 55px #f0a44b35);animation:photoReveal 1.6s ease both; -webkit-mask-image:linear-gradient(90deg,transparent 0%,#000 9%,#000 91%,transparent 100%);mask-image:linear-gradient(90deg,transparent 0%,#000 9%,#000 91%,transparent 100%)}
+@keyframes photoReveal{from{opacity:0;transform:scale(1.06) translateY(14px);filter:blur(5px)}to{opacity:1;transform:scale(1) translateY(0);filter:blur(0)}}
 @keyframes artFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
 .landing-bottom{position:absolute;z-index:2;bottom:20px;left:5vw;right:5vw;display:flex;justify-content:space-between;font-size:8px}
 .firework{position:absolute;z-index:0;width:130px;height:130px;border-radius:50%;opacity:0;animation:fireworkPop 4.8s ease-out infinite}
@@ -75,6 +76,6 @@
  .landing-hindi{font-size:25px;margin:10px 0}.landing-message{font-size:12px;line-height:1.6;margin:0 auto 8px}
  .landing-blessing{margin:10px 0 16px}.journey-button{padding:14px 18px}.landing-invite{font-size:11px;margin:10px auto 0}
  .landing-art{order:1;width:min(105%,500px);margin:-5px auto -35px;max-height:43vh;overflow:visible}
- .landing-art svg{max-height:43vh}.landing-bottom{bottom:12px;justify-content:center;text-align:center}.landing-bottom span:last-child{display:none}
+ .landing-art img{max-height:43vh;width:100%;object-fit:contain}.landing-bottom{bottom:12px;justify-content:center;text-align:center}.landing-bottom span:last-child{display:none}
  .firework{width:85px;height:85px}.fw-one{top:12%;right:16%}.fw-two{top:24%;right:2%}.fw-three{top:7%;left:30%}
 }
