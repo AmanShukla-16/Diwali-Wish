@@ -123,23 +123,26 @@
 @media(max-width:650px){#beginJourney{top:82%;width:78vw;min-height:54px;padding:12px 15px;font-size:13px}.firework{width:92px;height:92px}}
 
 
-/* Cinematic story TV layered over the existing Ayodhya welcome artwork */
-.story-tv{position:absolute;z-index:8;left:50%;top:48%;transform:translate(-50%,-50%);width:min(720px,58vw);padding:13px 15px 16px;border:2px solid #b8894b;border-radius:15px;background:linear-gradient(145deg,#211b20,#08070c 70%);box-shadow:0 0 0 5px #24151c,0 18px 65px #000c,0 0 34px #f6bd5a55}
-.tv-top{height:24px;display:flex;justify-content:space-between;align-items:center;padding:0 4px 9px;color:#f4d18c;font:600 9px 'Cinzel',serif;letter-spacing:.18em}
-.tv-live{color:#c9b38e;font:9px 'Hind',sans-serif;letter-spacing:.12em}.tv-live i{display:inline-block;width:6px;height:6px;border-radius:50%;background:#e9ad55;box-shadow:0 0 9px #ffc45c;margin-right:6px}
-.tv-screen{position:relative;overflow:hidden;aspect-ratio:16/9;background:#08060c;border:1px solid #8e6b3b;border-radius:5px}
-.tv-slide{position:absolute;inset:0;opacity:0;transform:scale(1.07);transition:opacity 1s ease,transform 6s ease}
-.tv-slide.active{opacity:1;transform:scale(1)}
-.tv-slide img{width:100%;height:100%;object-fit:cover;display:block}
-.tv-shade{position:absolute;inset:45% 0 0;pointer-events:none;background:linear-gradient(transparent,#08060dbb)}
-.tv-caption{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;padding:12px 5px 0;color:#f8e4bd}
-.tv-caption small{font:9px 'Cinzel',serif;letter-spacing:.2em;color:#dcb46d}
-.tv-caption h2{font:500 clamp(15px,2vw,22px) 'Cinzel',serif;margin:4px 0;color:#ffe2a4}
-.tv-caption p{margin:0;color:#cbb99e;font-size:11px}
-.tv-dots{display:flex;gap:6px;padding-bottom:5px}.tv-dots span{width:6px;height:6px;border-radius:50%;background:#8d7655}.tv-dots span.active{width:19px;border-radius:8px;background:#f5d18a}
-#beginJourney{top:88%;width:min(390px,70vw);min-height:58px}
+/* Compact, fixed top-centre story screen: it is part of the welcome layout, not a floating popup. */
+.story-tv{position:absolute;z-index:8;left:50%;top:7.5%;transform:translateX(-50%);width:min(560px,48vw);padding:8px 10px 9px;border:1px solid #b8894b;border-radius:10px;background:linear-gradient(145deg,#211b20ee,#08070ceF 70%);box-shadow:0 8px 28px #0009,0 0 18px #f6bd5a33}
+.tv-top{height:18px;display:flex;justify-content:space-between;align-items:center;padding:0 4px 5px;color:#f4d18c;font:600 8px 'Cinzel',serif;letter-spacing:.16em}
+.tv-live{color:#c9b38e;font:8px 'Hind',sans-serif;letter-spacing:.1em}.tv-live i{display:inline-block;width:6px;height:6px;border-radius:50%;background:#e9ad55;box-shadow:0 0 9px #ffc45c;margin-right:6px}
+.tv-screen{position:relative;overflow:hidden;aspect-ratio:16/9;background:#08060c;border:1px solid #8e6b3b;border-radius:5px;cursor:zoom-in}
+.tv-slide{position:absolute;inset:0;opacity:0;transform:scale(1.035);transition:opacity 1s ease,transform 5.6s ease;pointer-events:none}
+.tv-slide.active{opacity:1;transform:scale(1);pointer-events:auto}
+.tv-slide img{width:100%;height:100%;object-fit:contain;display:block}
+.tv-shade{position:absolute;inset:55% 0 0;pointer-events:none;background:linear-gradient(transparent,#08060d88)}
+.tv-caption{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;padding:7px 4px 0;color:#f8e4bd}
+.tv-caption small{font:8px 'Cinzel',serif;letter-spacing:.18em;color:#dcb46d}
+.tv-caption h2{font:500 clamp(13px,1.5vw,17px) 'Cinzel',serif;margin:2px 0;color:#ffe2a4}
+.tv-caption p{margin:0;color:#cbb99e;font-size:9px}
+.tv-dots{display:flex;gap:6px;padding-bottom:4px}.tv-dots span{width:5px;height:5px;border-radius:50%;background:#8d7655}.tv-dots span.active{width:16px;border-radius:8px;background:#f5d18a}
+.tv-lightbox{position:fixed;inset:0;z-index:30;background:#05030df2;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:5vh 5vw}
+.tv-lightbox.hidden{display:none}
+.tv-lightbox img{max-width:min(92vw,1200px);max-height:82vh;object-fit:contain;border:1px solid #c99c56;border-radius:8px;box-shadow:0 15px 60px #000}
+.tv-lightbox p{color:#ffe2a4;font:16px 'Cinzel',serif;text-align:center;margin:12px 0 0}
+.tv-lightbox-close{position:absolute;right:24px;top:18px;border:1px solid #d9b56e;border-radius:50%;width:42px;height:42px;background:#1a1118;color:#ffe2a4;font-size:28px;cursor:pointer}
 @media(max-width:650px){
- .story-tv{top:45%;width:88vw;padding:8px 9px 11px;border-radius:10px}
- .tv-top{height:19px;font-size:8px}.tv-caption{padding-top:8px}.tv-caption h2{font-size:14px}.tv-caption p{font-size:10px}.tv-caption small{font-size:8px}
- #beginJourney{top:88%;width:82vw;min-height:50px}
+ .story-tv{top:5.5%;width:min(88vw,440px);padding:6px 7px 7px}
+ .tv-top{height:16px;font-size:7px}.tv-caption{padding-top:5px}.tv-caption h2{font-size:12px}.tv-caption p{font-size:8px}.tv-caption small{font-size:7px}
 }
