@@ -254,7 +254,7 @@ function animate(){requestAnimationFrame(animate);const dt=Math.min(clock.getDel
  }
  const p=petals.geometry.attributes.position;for(let i=0;i<petalCount;i++){let y=p.getY(i)-petalSpeeds[i]*dt;if(y<0)y=9+Math.random()*3;p.setY(i,y);p.setX(i,p.getX(i)+Math.sin(t+i)*dt*.16)}p.needsUpdate=true;
  people.forEach(o=>{o.g.rotation.z=Math.sin(t*1.4+o.phase)*.025;o.arms[0].rotation.z=o.cheer?-.65+Math.sin(t*3+o.phase)*.28:-.18;o.arms[1].rotation.z=o.cheer?.65+Math.sin(t*3+o.phase+1)*.28:.18;o.g.position.y=Math.max(0,Math.sin(t*3.2+o.phase))*.045});
- travelers.forEach(o=>{o.figure.rotation.z=Math.sin(t*1.35+o.phase)*.018;o.figure.position.y=1.55+Math.sin(t*2+o.phase)*.035;o.arms[0].rotation.z=-.12+Math.sin(t*2.1+o.phase)*.12;o.arms[1].rotation.z=.12+Math.sin(t*2.1+o.phase+1)*.12});
+ travelers.forEach(o=>{o.figure.rotation.z=Math.sin(t*1.35+o.phase)*.018;o.figure.position.y=1.18+Math.sin(t*2+o.phase)*.025});
  vanaraWalkers.forEach(o=>{o.g.position.y=Math.abs(Math.sin(t*3+o.phase))*.045;o.arms[0].rotation.x=Math.sin(t*3+o.phase)*.18;o.arms[1].rotation.x=-.35+Math.sin(t*3+o.phase+1)*.18;o.g.rotation.y=Math.sin(t*1.7+o.phase)*.035});
  hArms[0].rotation.z=-.25+Math.sin(t*2.4)*.12;hArms[1].rotation.z=.18+Math.sin(t*2.4+1)*.1;hanuman.rotation.y=Math.sin(t*1.1)*.035;vanaraGlow.intensity=12+Math.sin(t*4)*2;
  if(processionStarted&&processionProgress<1){
