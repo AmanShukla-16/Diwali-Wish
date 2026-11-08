@@ -114,14 +114,23 @@ for(let i=0;i<28;i++){
  people.push({g,phase:Math.random()*6});
 }
 
-let started=false,locked=false,move={w:false,a:false,s:false,d:false},yaw=0,pitch=0,velocity=new THREE.Vector3(),soundOn=false,audioCtx=null,osc=null;
+let started=false,locked=false,move={w:false,a:false,s:false,d:false,arrowup:false,arrowdown:false,arrowleft:false,arrowright:false},yaw=0,pitch=0,velocity=new THREE.Vector3(),soundOn=false,audioCtx=null,osc=null;
 const intro=document.querySelector('#intro'),hud=document.querySelector('#hud'),welcome=document.querySelector('#welcome'),cross=document.querySelector('#crosshair'),wish=document.querySelector('#wish');
 const enter=document.querySelector('#enter');
-enter.addEventListener('click',()=>{started=true;intro.classList.add('hidden');hud.classList.remove('hidden');welcome.classList.remove('hidden');canvas.requestPointerLock?.()});
+enter.addEventListener('click',()=>{started=true;intro.classList.add('hidden');hud.classList.remove('hidden');welcome.classList.remove('hidden');document.querySelector('#movePad').classList.remove('hidden');canvas.requestPointerLock?.()});
 document.addEventListener('pointerlockchange',()=>{locked=document.pointerLockElement===canvas;cross.classList.toggle('hidden',!locked)});
 document.addEventListener('mousemove',e=>{if(!locked)return;yaw-=e.movementX*.0022;pitch-=e.movementY*.0018;pitch=THREE.MathUtils.clamp(pitch,-1.15,1.15)});
-document.addEventListener('keydown',e=>{const k=e.key.toLowerCase();if(k in move)move[k]=true;if(['w','a','s','d',' '].includes(k))e.preventDefault()});
-document.addEventListener('keyup',e=>{const k=e.key.toLowerCase();if(k in move)move[k]=false});
+function movementKey(key){const k=key.toLowerCase();return ({w:'w',arrowup:'w',s:'s',arrowdown:'s',a:'a',arrowleft:'a',d:'d',arrowright:'d'})[k]||null}
+window.addEventListener('keydown',e=>{const k=movementKey(e.key);if(k){move[k]=true;e.preventDefault()}});
+window.addEventListener('keyup',e=>{const k=movementKey(e.key);if(k)move[k]=false});
+window.addEventListener('blur',()=>{Object.keys(move).forEach(k=>move[k]=false)});
+document.querySelectorAll('[data-move]').forEach(button=>{
+ const key=button.dataset.move;
+ const down=e=>{e.preventDefault();move[key]=true;button.classList.add('pressed')};
+ const up=e=>{e.preventDefault();move[key]=false;button.classList.remove('pressed')};
+ button.addEventListener('pointerdown',down);
+ ['pointerup','pointerleave','pointercancel'].forEach(type=>button.addEventListener(type,up));
+});
 document.querySelector('#explore').addEventListener('click',()=>{welcome.classList.add('hidden');canvas.requestPointerLock?.()});
 document.querySelector('#again').addEventListener('click',()=>location.reload());
 document.querySelector('#sound').addEventListener('click',async()=>{soundOn=!soundOn;document.querySelector('#sound').textContent='♫ Sound: '+(soundOn?'On':'Off');if(soundOn){audioCtx??=new (window.AudioContext||window.webkitAudioContext)();await audioCtx.resume();if(!osc){osc=audioCtx.createOscillator();const gain=audioCtx.createGain();osc.type='sine';osc.frequency.value=110;gain.gain.value=.018;osc.connect(gain).connect(audioCtx.destination);osc.start()}}else if(audioCtx)await audioCtx.suspend()});
@@ -153,8 +162,12 @@ function animate(){requestAnimationFrame(animate);const dt=Math.min(clock.getDel
    setTimeout(()=>document.querySelector('#returnMoment')?.classList.add('hidden'),6500);
   }
   camera.rotation.order='YXZ';camera.rotation.y=yaw;camera.rotation.x=pitch;
-  const dir=new THREE.Vector3();camera.getWorldDirection(dir);dir.y=0;dir.normalize();const right=new THREE.Vector3().crossVectors(dir,new THREE.Vector3(0,1,0)).normalize();
-  const input=new THREE.Vector3();if(move.w)input.add(dir);if(move.s)input.sub(dir);if(move.d)input.add(right);if(move.a)input.sub(right);if(input.lengthSq())input.normalize();
+  const forward=new THREE.Vector3(-Math.sin(yaw),0,-Math.cos(yaw));
+  const right=new THREE.Vector3(Math.cos(yaw),0,-Math.sin(yaw));
+  const input=new THREE.Vector3();
+  if(move.w)input.add(forward);if(move.s)input.sub(forward);
+  if(move.d)input.add(right);if(move.a)input.sub(right);
+  if(input.lengthSq())input.normalize();
   camera.position.addScaledVector(input,dt*5.2);camera.position.x=THREE.MathUtils.clamp(camera.position.x,-5.1,5.1);camera.position.z=THREE.MathUtils.clamp(camera.position.z,-120,12);camera.position.y=2.1;
   if(camera.position.z < -104){wish.classList.remove('hidden');document.exitPointerLock?.()}
  }
