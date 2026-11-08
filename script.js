@@ -163,15 +163,27 @@ const vanaraGlow=new THREE.PointLight(0xffb45c,12,18);vanaraGlow.position.set(-2
 const processionGlow=new THREE.PointLight(0xffd18a,24,24);processionGlow.position.set(0,4.2,1.5);chariot.add(processionGlow);
 let processionStarted=false,processionProgress=0;
 
+// Red ceremonial carpet, golden rangoli borders and lush gardens.
+const carpet=new THREE.Mesh(new THREE.PlaneGeometry(5.2,150),mat(0x92243a,.8));carpet.rotation.x=-Math.PI/2;carpet.position.set(0,.035,-61);scene.add(carpet);
+for(const x of [-2.68,2.68]){const edge=new THREE.Mesh(new THREE.BoxGeometry(.12,.035,150),gold);edge.position.set(x,.055,-61);scene.add(edge)}
+for(let z=8;z>-125;z-=3.4)for(const x of [-2.35,2.35]){const rangoli=new THREE.Mesh(new THREE.CircleGeometry(.2,12),gold);rangoli.rotation.x=-Math.PI/2;rangoli.position.set(x,.065,z);scene.add(rangoli)}
+const greens=[mat(0x315b37),mat(0x477b43),mat(0x668d4b)],bark=mat(0x60412d),blossoms=[mat(0xffc4a6),mat(0xffd77b),mat(0xf2a9c4)];
+for(let side of [-1,1])for(let i=0;i<19;i++){
+ const z=5-i*6.4,x=side*(8+(i%3)*.9),g=new THREE.Group();g.position.set(x,0,z);scene.add(g);
+ const trunk=new THREE.Mesh(new THREE.CylinderGeometry(.16,.25,2.2,8),bark);trunk.position.y=1.1;g.add(trunk);
+ for(let j=0;j<5;j++){const crown=new THREE.Mesh(new THREE.SphereGeometry(.85+(j%2)*.18,10,8),greens[(i+j)%3]);crown.position.set((j%2-.5)*.62,2.45+(j%3)*.35,(j-2)*.18);g.add(crown)}
+ for(let j=0;j<5;j++){const flower=new THREE.Mesh(new THREE.SphereGeometry(.13,8,8),blossoms[(i+j)%3]);flower.position.set(Math.sin(j*2)*.65,2.3+(j%3)*.35,Math.cos(j*2)*.62);g.add(flower)}
+}
+
 // Simple silhouettes of welcoming townspeople along the route
 const people=[];
-for(let i=0;i<28;i++){
- const side=i%2?1:-1,z=-8-Math.floor(i/2)*7.5,x=side*(4.6+Math.random()*.5),g=new THREE.Group();g.position.set(x,0,z);scene.add(g);
- const robe=new THREE.Mesh(new THREE.CylinderGeometry(.22,.38,1.25,8),i%3===0?mat(0x9b4939):i%3===1?mat(0x354d5a):mat(0x98703d));robe.position.y=.78;g.add(robe);
- const head=new THREE.Mesh(new THREE.SphereGeometry(.23,12,10),mat(0x9c694c));head.position.y=1.58;g.add(head);
- const armMat=robe.material;
- for(let s of [-1,1]){const arm=new THREE.Mesh(new THREE.CylinderGeometry(.07,.09,.8,7),armMat);arm.position.set(s*.32,1.05,0);arm.rotation.z=s*-.25;g.add(arm)}
- people.push({g,phase:Math.random()*6});
+const crowdColors=[0x9b4939,0x354d5a,0x98703d,0x6b477d,0x3f725d,0xb07838,0x8b354f,0x486b8c];
+for(let i=0;i<96;i++){
+ const side=i%2?1:-1,row=Math.floor(i/2),z=3-row*1.65,x=side*(5.15+(row%4)*.38+Math.random()*.25),g=new THREE.Group();g.position.set(x,0,z);scene.add(g);
+ const robeMat=mat(crowdColors[i%crowdColors.length]),robe=new THREE.Mesh(new THREE.CylinderGeometry(.2,.34,1.12,10),robeMat);robe.position.y=.68;g.add(robe);
+ const head=new THREE.Mesh(new THREE.SphereGeometry(.22,12,10),mat(i%3===0?0x754a37:0x9c694c));head.position.y=1.48;g.add(head);
+ const arms=[];for(const sideArm of [-1,1]){const arm=new THREE.Group();arm.position.set(sideArm*.27,1.02,0);g.add(arm);const limb=new THREE.Mesh(new THREE.CylinderGeometry(.065,.085,.64,8),robeMat);limb.position.y=-.28;arm.add(limb);arms.push(arm)}
+ people.push({g,arms,phase:Math.random()*6,cheer:i%3!==0});
 }
 
 let started=false,locked=false,move={w:false,a:false,s:false,d:false,arrowup:false,arrowdown:false,arrowleft:false,arrowright:false},yaw=0,pitch=0,velocity=new THREE.Vector3(),soundOn=false,audioCtx=null,osc=null;
@@ -241,8 +253,8 @@ function animate(){requestAnimationFrame(animate);const dt=Math.min(clock.getDel
   if(p.life<=0){scene.remove(p.mesh);p.mesh.geometry.dispose();p.mesh.material.dispose();celebrationParticles.splice(i,1)}
  }
  const p=petals.geometry.attributes.position;for(let i=0;i<petalCount;i++){let y=p.getY(i)-petalSpeeds[i]*dt;if(y<0)y=9+Math.random()*3;p.setY(i,y);p.setX(i,p.getX(i)+Math.sin(t+i)*dt*.16)}p.needsUpdate=true;
- people.forEach(o=>{o.g.rotation.z=Math.sin(t*1.4+o.phase)*.045});
- travelers.forEach(o=>{o.figure.rotation.z=Math.sin(t*1.5+o.phase)*.025});
+ people.forEach(o=>{o.g.rotation.z=Math.sin(t*1.4+o.phase)*.025;o.arms[0].rotation.z=o.cheer?-.65+Math.sin(t*3+o.phase)*.28:-.18;o.arms[1].rotation.z=o.cheer?.65+Math.sin(t*3+o.phase+1)*.28:.18;o.g.position.y=Math.max(0,Math.sin(t*3.2+o.phase))*.045});
+ travelers.forEach(o=>{o.figure.rotation.z=Math.sin(t*1.35+o.phase)*.018;o.figure.position.y=1.55+Math.sin(t*2+o.phase)*.035;o.arms[0].rotation.z=-.12+Math.sin(t*2.1+o.phase)*.12;o.arms[1].rotation.z=.12+Math.sin(t*2.1+o.phase+1)*.12});
  vanaraWalkers.forEach(o=>{o.g.position.y=Math.abs(Math.sin(t*3+o.phase))*.045;o.arms[0].rotation.x=Math.sin(t*3+o.phase)*.18;o.arms[1].rotation.x=-.35+Math.sin(t*3+o.phase+1)*.18;o.g.rotation.y=Math.sin(t*1.7+o.phase)*.035});
  hArms[0].rotation.z=-.25+Math.sin(t*2.4)*.12;hArms[1].rotation.z=.18+Math.sin(t*2.4+1)*.1;hanuman.rotation.y=Math.sin(t*1.1)*.035;vanaraGlow.intensity=12+Math.sin(t*4)*2;
  if(processionStarted&&processionProgress<1){
