@@ -186,3 +186,14 @@
 #tvLightbox.tv-lightbox{position:fixed!important;inset:0!important;z-index:20000!important;display:flex!important;visibility:visible!important;opacity:1!important;pointer-events:auto!important;background:rgba(3,2,10,.96)!important}
 #tvLightbox.tv-lightbox.hidden{display:none!important;visibility:hidden!important;opacity:0!important;pointer-events:none!important}
 #tvLightbox #tvLightboxImage{max-width:92vw!important;max-height:82vh!important;width:auto!important;height:auto!important;object-fit:contain!important}
+
+
+/* When an image is enlarged, hide the original TV so it cannot show through underneath. */
+body.tv-preview-active #landing .story-tv{
+ visibility:hidden!important;opacity:0!important;pointer-events:none!important;
+}
+body.tv-preview-active #tvLightbox{
+ display:flex!important;visibility:visible!important;opacity:1!important;pointer-events:auto!important;
+ z-index:30000!important;
+}
+#tvLightbox img{display:block!important;max-width:92vw!important;max-height:82vh!important;object-fit:contain!important}
