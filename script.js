@@ -100,6 +100,59 @@ function addTraveler(x,robeColor,crownColor,scale=1){
 addTraveler(-.78,0x315a79,0xe8bd62,.92);
 addTraveler(0,0x9b3e38,0xf2d28a,1.02);
 addTraveler(.78,0x315a79,0xe8bd62,.92);
+
+/* Vanara sena and Hanuman accompany the homecoming procession.
+   These are stylized, respectful low-poly characters built from Three.js primitives. */
+const vanaraSena=new THREE.Group();
+scene.add(vanaraSena);
+vanaraSena.position.set(0,0,-47);
+const vanaraWalkers=[];
+const furMat=mat(0x9a6541),furLight=mat(0xc18450),muzzleMat=mat(0xd5a477),vanaraCloth=[mat(0xb64f35),mat(0x315d72),mat(0x9a7434)];
+function makeVanara(x,z,index){
+ const g=new THREE.Group();g.position.set(x,0,z);vanaraSena.add(g);
+ const fur=index%2?furMat:furLight,robe=vanaraCloth[index%vanaraCloth.length];
+ const torso=new THREE.Mesh(new THREE.CylinderGeometry(.22,.34,.95,9),robe);torso.position.y=.78;g.add(torso);
+ const head=new THREE.Group();head.position.set(0,1.48,0);g.add(head);
+ const skull=new THREE.Mesh(new THREE.SphereGeometry(.29,12,10),fur);head.add(skull);
+ const muzzle=new THREE.Mesh(new THREE.SphereGeometry(.16,10,8),muzzleMat);muzzle.position.set(0,-.1,.22);muzzle.scale.set(1,.72,.8);head.add(muzzle);
+ for(const side of [-1,1]){const ear=new THREE.Mesh(new THREE.SphereGeometry(.12,8,8),fur);ear.position.set(side*.27,.08,0);head.add(ear)}
+ const arms=[];
+ for(const side of [-1,1]){
+  const arm=new THREE.Group();arm.position.set(side*.27,1.12,0);g.add(arm);
+  const limb=new THREE.Mesh(new THREE.CylinderGeometry(.075,.095,.68,8),fur);limb.position.y=-.29;limb.rotation.z=side*.16;arm.add(limb);
+  const hand=new THREE.Mesh(new THREE.SphereGeometry(.11,8,8),muzzleMat);hand.position.set(side*.08,-.62,.04);arm.add(hand);arms.push(arm);
+ }
+ const tailCurve=new THREE.CatmullRomCurve3([new THREE.Vector3(0,.35,-.12),new THREE.Vector3(-.2,.05,-.45),new THREE.Vector3(-.38,.42,-.7),new THREE.Vector3(-.18,.72,-.82)]);
+ const tail=new THREE.Mesh(new THREE.TubeGeometry(tailCurve,12,.055,6,false),fur);g.add(tail);
+ vanaraWalkers.push({g,arms,phase:index*.8,tail});
+ return g;
+}
+for(let row=0;row<4;row++)for(const side of [-1,1])makeVanara(side*(3.65+(row%2)*.35),1.8+row*2.05,row+(side===1?4:0));
+
+// Hanuman is shown respectfully beside the chariot, holding his gada.
+const hanuman=new THREE.Group();hanuman.position.set(-3.25,0,1.1);vanaraSena.add(hanuman);
+const hanumanFur=mat(0x9a5937),hanumanCloth=mat(0xd56c2e),hanumanGold=mat(0xe6bd65,.35,.5);
+const hBody=new THREE.Mesh(new THREE.CylinderGeometry(.34,.48,1.45,12),hanumanCloth);hBody.position.y=1.05;hanuman.add(hBody);
+const hChest=new THREE.Mesh(new THREE.SphereGeometry(.38,12,10),hanumanFur);hChest.position.set(0,1.82,0);hChest.scale.set(.9,1.05,.75);hanuman.add(hChest);
+const hHead=new THREE.Group();hHead.position.set(0,2.15,.02);hanuman.add(hHead);
+const hFace=new THREE.Mesh(new THREE.SphereGeometry(.34,16,12),hanumanFur);hHead.add(hFace);
+const hMuzzle=new THREE.Mesh(new THREE.SphereGeometry(.19,12,10),muzzleMat);hMuzzle.position.set(0,-.13,.25);hMuzzle.scale.set(1,.72,.75);hHead.add(hMuzzle);
+for(const side of [-1,1]){const ear=new THREE.Mesh(new THREE.SphereGeometry(.14,10,8),hanumanFur);ear.position.set(side*.31,.08,0);hHead.add(ear)}
+const hCrown=new THREE.Mesh(new THREE.ConeGeometry(.31,.62,6),hanumanGold);hCrown.position.y=.53;hHead.add(hCrown);
+const hHalo=new THREE.Mesh(new THREE.TorusGeometry(.52,.055,8,32),hanumanGold);hHalo.position.set(0,.05,-.13);hHead.add(hHalo);
+const hArms=[];
+for(const side of [-1,1]){
+ const arm=new THREE.Group();arm.position.set(side*.37,1.62,.02);hanuman.add(arm);
+ const limb=new THREE.Mesh(new THREE.CylinderGeometry(.11,.14,.9,10),hanumanFur);limb.position.y=-.38;limb.rotation.z=side*.18;arm.add(limb);hArms.push(arm);
+}
+const gada=new THREE.Group();gada.position.set(.65,1.25,.22);gada.rotation.z=-.12;hanuman.add(gada);
+const gadaHandle=new THREE.Mesh(new THREE.CylinderGeometry(.055,.07,1.55,10),hanumanGold);gadaHandle.position.y=.25;gada.add(gadaHandle);
+const gadaHead=new THREE.Mesh(new THREE.SphereGeometry(.34,14,12),hanumanGold);gadaHead.position.y=1.12;gada.add(gadaHead);
+const gadaBand=new THREE.Mesh(new THREE.TorusGeometry(.25,.045,8,20),gold);gadaBand.position.y=1.12;gada.add(gadaBand);
+const hTailCurve=new THREE.CatmullRomCurve3([new THREE.Vector3(-.18,.55,-.2),new THREE.Vector3(-.58,.2,-.55),new THREE.Vector3(-.72,.72,-.85),new THREE.Vector3(-.42,1.02,-.95)]);
+hanuman.add(new THREE.Mesh(new THREE.TubeGeometry(hTailCurve,18,.075,8,false),hanumanFur));
+const vanaraGlow=new THREE.PointLight(0xffb45c,12,18);vanaraGlow.position.set(-2,4,2);vanaraSena.add(vanaraGlow);
+
 const processionGlow=new THREE.PointLight(0xffd18a,24,24);processionGlow.position.set(0,4.2,1.5);chariot.add(processionGlow);
 let processionStarted=false,processionProgress=0;
 
@@ -183,10 +236,13 @@ function animate(){requestAnimationFrame(animate);const dt=Math.min(clock.getDel
  const p=petals.geometry.attributes.position;for(let i=0;i<petalCount;i++){let y=p.getY(i)-petalSpeeds[i]*dt;if(y<0)y=9+Math.random()*3;p.setY(i,y);p.setX(i,p.getX(i)+Math.sin(t+i)*dt*.16)}p.needsUpdate=true;
  people.forEach(o=>{o.g.rotation.z=Math.sin(t*1.4+o.phase)*.045});
  travelers.forEach(o=>{o.figure.rotation.z=Math.sin(t*1.5+o.phase)*.025});
+ vanaraWalkers.forEach(o=>{o.g.position.y=Math.abs(Math.sin(t*3+o.phase))*.045;o.arms[0].rotation.x=Math.sin(t*3+o.phase)*.18;o.arms[1].rotation.x=-.35+Math.sin(t*3+o.phase+1)*.18;o.g.rotation.y=Math.sin(t*1.7+o.phase)*.035});
+ hArms[0].rotation.z=-.25+Math.sin(t*2.4)*.12;hArms[1].rotation.z=.18+Math.sin(t*2.4+1)*.1;hanuman.rotation.y=Math.sin(t*1.1)*.035;vanaraGlow.intensity=12+Math.sin(t*4)*2;
  if(processionStarted&&processionProgress<1){
   processionProgress=Math.min(1,processionProgress+dt*.075);
   const ease=processionProgress*processionProgress*(3-2*processionProgress);
   chariot.position.z=-47+34*ease; // The homecoming procession advances toward and past the viewer
+  vanaraSena.position.z=chariot.position.z;
   chariot.position.y=Math.sin(t*2)*.035;
   processionGlow.intensity=24+Math.sin(t*5)*4;
   lamps.forEach(l=>{if(Math.abs(l.light.position.z-camera.position.z)<18)l.light.intensity=5.2});
