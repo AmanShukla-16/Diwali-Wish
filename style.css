@@ -20,3 +20,19 @@
 @keyframes revealMoment{from{opacity:0;transform:translate(-50%,15px)}to{opacity:1;transform:translate(-50%,0)}}
 
 .move-pad{position:absolute;z-index:6;right:22px;bottom:35px;width:142px;height:132px;display:grid;grid-template-columns:repeat(3,44px);grid-template-rows:repeat(3,40px);gap:4px;touch-action:none}.move-pad button{border:1px solid #e9c77b99;border-radius:8px;background:#201426c9;color:#ffe1a4;font-size:17px;backdrop-filter:blur(6px);touch-action:none;cursor:pointer}.move-pad button.pressed{background:#c28b45;color:#1b1010}.move-pad [data-move="w"]{grid-column:2;grid-row:1}.move-pad [data-move="a"]{grid-column:1;grid-row:2}.move-pad [data-move="s"]{grid-column:2;grid-row:2}.move-pad [data-move="d"]{grid-column:3;grid-row:2}@media(min-width:800px){.move-pad{right:32px;bottom:28px;opacity:.7}.move-pad:hover{opacity:1}}
+
+.hud-actions{display:flex;align-items:center;gap:8px}
+.celebrate-button{border:1px solid #f2cd83;background:linear-gradient(135deg,#4b2d35,#24172c);color:#ffe2a7;border-radius:999px;padding:9px 15px;font:600 11px 'Hind',sans-serif;letter-spacing:.06em;cursor:pointer;box-shadow:0 0 18px #f2b95b22}
+.celebrate-button.celebrating{animation:celebratePulse .7s ease}
+@keyframes celebratePulse{50%{transform:scale(1.12);box-shadow:0 0 30px #ffd36b99}}
+.mobile-tip{position:absolute;z-index:5;left:50%;bottom:174px;transform:translateX(-50%);width:max-content;max-width:90vw;text-align:center;color:#ffe6b6;background:#1b1124cc;border:1px solid #e9c77b66;border-radius:20px;padding:8px 13px;font-size:10px;letter-spacing:.04em;pointer-events:none}
+@media(max-width:650px){
+ .hud{top:65px;left:4vw;right:4vw;gap:7px}.hud-title{font-size:9px}.hud-help{display:none}.hud-actions{margin-left:auto}
+ .sound-button,.celebrate-button{padding:9px 11px;font-size:10px}
+ .move-pad{right:16px;bottom:24px;width:174px;height:162px;grid-template-columns:repeat(3,54px);grid-template-rows:repeat(3,50px);gap:5px}
+ .move-pad button{font-size:20px;border-radius:13px;background:#24152cdd;border-width:1.5px;box-shadow:0 4px 12px #0006}
+ .mobile-tip{bottom:190px}
+ .welcome{left:5vw;bottom:18vh;width:min(310px,76vw);padding:14px 16px}
+ .welcome h2{font-size:25px}.welcome p:not(.eyebrow){font-size:12px;line-height:1.45}
+ .footer-note{display:none}
+}
