@@ -165,3 +165,18 @@
  #landing .tv-caption h2{font-size:12px!important}
  #landing .tv-caption p{font-size:8px!important}
 }
+
+
+/* Guaranteed welcome-gallery placement above the full-screen artwork */
+#landing>.story-tv{
+ position:fixed!important;left:50%!important;top:12px!important;right:auto!important;
+ transform:translateX(-50%)!important;width:min(560px,calc(100vw - 36px))!important;
+ max-height:none!important;z-index:10000!important;display:block!important;visibility:visible!important;
+ opacity:1!important;pointer-events:auto!important;
+}
+#landing>.story-tv .tv-screen{height:auto!important;aspect-ratio:16/9!important;min-height:0!important}
+#landing>.story-tv .tv-slide img{height:100%!important;width:100%!important;object-fit:contain!important}
+@media(max-width:650px){
+ #landing>.story-tv{top:8px!important;width:calc(100vw - 24px)!important;padding:5px 6px 6px!important}
+ #landing>.story-tv .tv-screen{aspect-ratio:16/9!important}
+}
