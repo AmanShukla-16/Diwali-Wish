@@ -180,3 +180,9 @@
  #landing>.story-tv{top:8px!important;width:calc(100vw - 24px)!important;padding:5px 6px 6px!important}
  #landing>.story-tv .tv-screen{aspect-ratio:16/9!important}
 }
+
+
+/* Modal is a sibling of the landing section so it is not clipped or faded with it. */
+#tvLightbox.tv-lightbox{position:fixed!important;inset:0!important;z-index:20000!important;display:flex!important;visibility:visible!important;opacity:1!important;pointer-events:auto!important;background:rgba(3,2,10,.96)!important}
+#tvLightbox.tv-lightbox.hidden{display:none!important;visibility:hidden!important;opacity:0!important;pointer-events:none!important}
+#tvLightbox #tvLightboxImage{max-width:92vw!important;max-height:82vh!important;width:auto!important;height:auto!important;object-fit:contain!important}
