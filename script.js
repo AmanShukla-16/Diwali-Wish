@@ -186,7 +186,7 @@ function animate(){requestAnimationFrame(animate);const dt=Math.min(clock.getDel
  if(processionStarted&&processionProgress<1){
   processionProgress=Math.min(1,processionProgress+dt*.075);
   const ease=processionProgress*processionProgress*(3-2*processionProgress);
-  chariot.position.z=-47-13*ease;
+  chariot.position.z=-47+16*ease; // The homecoming procession advances toward the viewer
   chariot.position.y=Math.sin(t*2)*.035;
   processionGlow.intensity=24+Math.sin(t*5)*4;
   lamps.forEach(l=>{if(Math.abs(l.light.position.z-camera.position.z)<18)l.light.intensity=5.2});
