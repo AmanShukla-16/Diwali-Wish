@@ -212,7 +212,22 @@ function showTvSlide(index){
  tvTitle.textContent=tvSlides[index].dataset.title;
  tvCaption.textContent=tvSlides[index].dataset.caption;
 }
-if(tvSlides.length){showTvSlide(0);setInterval(()=>{if(!started)showTvSlide((tvIndex+1)%tvSlides.length)},5600)}
+if(tvSlides.length){
+ showTvSlide(0);
+ setInterval(()=>{if(!started&&!document.querySelector('#tvLightbox')?.classList.contains('open'))showTvSlide((tvIndex+1)%tvSlides.length)},5600);
+ const tvScreen=document.querySelector('.tv-screen'),lightbox=document.querySelector('#tvLightbox');
+ const lightboxImage=document.querySelector('#tvLightboxImage'),lightboxTitle=document.querySelector('#tvLightboxTitle');
+ const closeLightbox=()=>{lightbox.classList.add('hidden');lightbox.classList.remove('open');lightboxImage.removeAttribute('src')};
+ tvScreen?.addEventListener('click',()=>{
+  const active=tvSlides[tvIndex],img=active?.querySelector('img');
+  if(!img)return;
+  lightboxImage.src=img.src;lightboxTitle.textContent=active.dataset.title||img.alt||'Ramayana';
+  lightbox.classList.remove('hidden');lightbox.classList.add('open');
+ });
+ document.querySelector('#tvLightboxClose')?.addEventListener('click',closeLightbox);
+ lightbox?.addEventListener('click',e=>{if(e.target===lightbox)closeLightbox()});
+ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&lightbox&&!lightbox.classList.contains('hidden'))closeLightbox()});
+}
 document.addEventListener('pointerlockchange',()=>{locked=document.pointerLockElement===canvas;cross.classList.toggle('hidden',!locked)});
 document.addEventListener('mousemove',e=>{if(!locked)return;yaw-=e.movementX*.0022;pitch=THREE.MathUtils.clamp(pitch-e.movementY*.0018,-1.15,1.15)});
 function movementKey(key){const k=key.toLowerCase();return ({w:'w',arrowup:'w',s:'s',arrowdown:'s',a:'a',arrowleft:'a',d:'d',arrowright:'d'})[k]||null}
