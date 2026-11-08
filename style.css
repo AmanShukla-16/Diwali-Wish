@@ -197,3 +197,33 @@ body.tv-preview-active #tvLightbox{
  z-index:30000!important;
 }
 #tvLightbox img{display:block!important;max-width:92vw!important;max-height:82vh!important;object-fit:contain!important}
+
+
+/* Mobile gameplay: remove all welcome/gallery layers once the player enters the 3D world. */
+body.game-active #landing,
+body.game-active #tvLightbox{
+ display:none!important;visibility:hidden!important;opacity:0!important;
+ pointer-events:none!important;
+}
+body.game-active .tv-lightbox{display:none!important;pointer-events:none!important}
+body.game-active #world{touch-action:none}
+body.game-active .move-pad{
+ z-index:50000!important;display:grid!important;visibility:visible!important;
+ opacity:1!important;pointer-events:auto!important;touch-action:none!important;
+ -webkit-user-select:none!important;user-select:none!important;
+}
+body.game-active .move-pad button{
+ display:flex!important;align-items:center!important;justify-content:center!important;
+ min-width:44px;min-height:44px;touch-action:none!important;
+ -webkit-tap-highlight-color:transparent;pointer-events:auto!important;
+}
+@media(max-width:650px){
+ body.game-active .move-pad{
+  right:max(14px,env(safe-area-inset-right))!important;
+  bottom:max(22px,env(safe-area-inset-bottom))!important;
+  width:156px!important;height:144px!important;
+  grid-template-columns:repeat(3,48px)!important;
+  grid-template-rows:repeat(3,44px)!important;gap:5px!important;
+ }
+ body.game-active .move-pad button{font-size:20px!important;border-width:2px!important;background:rgba(35,20,38,.94)!important}
+}
