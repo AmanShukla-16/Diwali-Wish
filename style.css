@@ -36,3 +36,45 @@
  .welcome h2{font-size:25px}.welcome p:not(.eyebrow){font-size:12px;line-height:1.45}
  .footer-note{display:none}
 }
+
+/* Separate public-facing Diwali welcome screen */
+.landing{position:absolute;inset:0;z-index:10;overflow:hidden;background:radial-gradient(ellipse at 70% 45%,#6b2c37 0%,#35172e 42%,#10091d 82%);color:#fff0d0;transition:opacity .65s ease,transform .65s ease}
+.landing-exit{opacity:0;transform:scale(1.025);pointer-events:none}
+.landing:before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,#10091d 0%,#10091dcf 35%,transparent 75%),radial-gradient(ellipse at 76% 75%,#e5a34b26,transparent 45%);pointer-events:none}
+.landing-stars{position:absolute;inset:0;opacity:.5;background-image:radial-gradient(#ffe5aa 1px,transparent 1.5px),radial-gradient(#f7c56e 1px,transparent 1.5px);background-size:83px 83px,127px 127px;background-position:0 0,34px 44px}
+.landing-nav{position:absolute;z-index:2;top:0;left:0;right:0;padding:27px 5vw;display:flex;justify-content:space-between;align-items:center}
+.landing-brand{font:600 16px 'Cinzel',serif;color:#f6d58b;letter-spacing:.16em}.landing-nav-note,.landing-bottom{font-size:9px;letter-spacing:.24em;color:#dfc49a}
+.landing-content{position:relative;z-index:1;width:min(1320px,92vw);height:100%;margin:auto;display:grid;grid-template-columns:minmax(340px,.88fr) minmax(460px,1.12fr);align-items:center;gap:10px;padding:85px 0 65px}
+.landing-copy{position:relative;z-index:2;padding-left:2vw;max-width:550px}
+.landing-kicker{font-size:11px;letter-spacing:.28em;color:#f3d08a;margin:0 0 22px}
+.landing-copy h1{font:500 clamp(58px,8vw,105px)/.98 'Cinzel',serif;margin:0;color:#fff0d1;text-shadow:0 0 34px #e6a74e55}
+.landing-copy h1 em{display:block;color:#f6d58b;font-weight:400}
+.landing-hindi{font:500 clamp(26px,3vw,38px) 'Hind',sans-serif;color:#ffdf9a;letter-spacing:.13em;margin:22px 0 12px;text-shadow:0 0 22px #f7bd64a0}
+.landing-message{max-width:430px;color:#ead9c2;font-size:15px;line-height:1.9;margin:0 0 17px}
+.landing-blessing{font:500 12px 'Cinzel',serif;color:#f2d18b;letter-spacing:.2em;margin:18px 0 26px}
+.journey-button{display:inline-flex;align-items:center;gap:28px;padding:16px 22px;border:1px solid #f4d18b;background:linear-gradient(120deg,#f7dfa4,#bd813b);color:#28170d;font:700 11px 'Hind',sans-serif;letter-spacing:.18em;cursor:pointer;box-shadow:0 0 32px #e9b65b55;transition:transform .2s,box-shadow .2s}
+.journey-button:hover{transform:translateY(-3px);box-shadow:0 0 45px #f2c56e99}.journey-button b{font-size:20px;font-weight:400}
+.landing-invite{max-width:360px;color:#d9c4a4;font-size:12px;line-height:1.6;margin:14px 0 0}
+.landing-art{align-self:center;justify-self:center;width:100%;max-width:760px;filter:drop-shadow(0 18px 55px #f0a44b22);animation:artFloat 7s ease-in-out infinite}
+.landing-art svg{display:block;width:100%;height:auto;overflow:visible}
+@keyframes artFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
+.landing-bottom{position:absolute;z-index:2;bottom:20px;left:5vw;right:5vw;display:flex;justify-content:space-between;font-size:8px}
+.firework{position:absolute;z-index:0;width:130px;height:130px;border-radius:50%;opacity:0;animation:fireworkPop 4.8s ease-out infinite}
+.firework:before,.firework:after,.firework i{content:"";position:absolute;inset:0;border-radius:50%;background:repeating-conic-gradient(from 0deg,transparent 0deg 8deg,#ffd98c 9deg 10deg,transparent 11deg 30deg);mask:radial-gradient(circle,transparent 0 12%,#000 14% 58%,transparent 62%)}
+.firework:after{transform:rotate(15deg) scale(.72);background:repeating-conic-gradient(#ff9b64 0deg 1deg,transparent 2deg 24deg)}
+.firework i{transform:rotate(7deg) scale(.9);background:repeating-conic-gradient(transparent 0deg 14deg,#fff0b0 15deg 16deg,transparent 17deg 30deg)}
+.fw-one{top:13%;right:23%;animation-delay:.2s}.fw-two{top:25%;right:5%;transform:scale(.72);animation-delay:2s}.fw-three{top:7%;left:43%;transform:scale(.55);animation-delay:3.4s}
+@keyframes fireworkPop{0%,8%{opacity:0;transform:scale(.15)}15%{opacity:.9;transform:scale(1)}38%{opacity:0;transform:scale(1.45)}100%{opacity:0}}
+@media(max-width:850px){
+ .landing-content{grid-template-columns:1fr 1fr;width:94vw;gap:0}.landing-copy{padding-left:1vw}.landing-copy h1{font-size:clamp(48px,8vw,76px)}.landing-message{font-size:13px}.landing-art{width:115%;margin-left:-8%}
+}
+@media(max-width:620px){
+ .landing-nav{padding:19px 6vw}.landing-nav-note{display:none}.landing-content{display:flex;flex-direction:column;justify-content:flex-start;gap:0;padding:88px 0 48px;overflow-y:auto}
+ .landing-copy{width:100%;max-width:500px;text-align:center;padding:0 5vw;order:2;margin-top:-5px}
+ .landing-kicker{font-size:9px;margin-bottom:10px}.landing-copy h1{font-size:clamp(48px,13vw,70px)}
+ .landing-hindi{font-size:25px;margin:10px 0}.landing-message{font-size:12px;line-height:1.6;margin:0 auto 8px}
+ .landing-blessing{margin:10px 0 16px}.journey-button{padding:14px 18px}.landing-invite{font-size:11px;margin:10px auto 0}
+ .landing-art{order:1;width:min(105%,500px);margin:-5px auto -35px;max-height:43vh;overflow:visible}
+ .landing-art svg{max-height:43vh}.landing-bottom{bottom:12px;justify-content:center;text-align:center}.landing-bottom span:last-child{display:none}
+ .firework{width:85px;height:85px}.fw-one{top:12%;right:16%}.fw-two{top:24%;right:2%}.fw-three{top:7%;left:30%}
+}
