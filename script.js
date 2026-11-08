@@ -117,7 +117,7 @@ for(let i=0;i<28;i++){
 let started=false,locked=false,move={w:false,a:false,s:false,d:false,arrowup:false,arrowdown:false,arrowleft:false,arrowright:false},yaw=0,pitch=0,velocity=new THREE.Vector3(),soundOn=false,audioCtx=null,osc=null;
 const intro=document.querySelector('#intro'),hud=document.querySelector('#hud'),welcome=document.querySelector('#welcome'),cross=document.querySelector('#crosshair'),wish=document.querySelector('#wish');
 const enter=document.querySelector('#enter');
-enter.addEventListener('click',()=>{started=true;intro.classList.add('hidden');hud.classList.remove('hidden');welcome.classList.remove('hidden');document.querySelector('#movePad').classList.remove('hidden');canvas.requestPointerLock?.()});
+enter.addEventListener('click',()=>{started=true;intro.classList.add('hidden');hud.classList.remove('hidden');welcome.classList.remove('hidden');document.querySelector('#movePad').classList.remove('hidden');if(matchMedia('(pointer: coarse)').matches)document.querySelector('#mobileTip').classList.remove('hidden');canvas.requestPointerLock?.()});
 document.addEventListener('pointerlockchange',()=>{locked=document.pointerLockElement===canvas;cross.classList.toggle('hidden',!locked)});
 document.addEventListener('mousemove',e=>{if(!locked)return;yaw-=e.movementX*.0022;pitch-=e.movementY*.0018;pitch=THREE.MathUtils.clamp(pitch,-1.15,1.15)});
 function movementKey(key){const k=key.toLowerCase();return ({w:'w',arrowup:'w',s:'s',arrowdown:'s',a:'a',arrowleft:'a',d:'d',arrowright:'d'})[k]||null}
@@ -126,7 +126,7 @@ window.addEventListener('keyup',e=>{const k=movementKey(e.key);if(k)move[k]=fals
 window.addEventListener('blur',()=>{Object.keys(move).forEach(k=>move[k]=false)});
 document.querySelectorAll('[data-move]').forEach(button=>{
  const key=button.dataset.move;
- const down=e=>{e.preventDefault();move[key]=true;button.classList.add('pressed')};
+ const down=e=>{e.preventDefault();button.setPointerCapture?.(e.pointerId);move[key]=true;button.classList.add('pressed')};
  const up=e=>{e.preventDefault();move[key]=false;button.classList.remove('pressed')};
  button.addEventListener('pointerdown',down);
  ['pointerup','pointerleave','pointercancel'].forEach(type=>button.addEventListener(type,up));
@@ -137,13 +137,49 @@ document.querySelector('#sound').addEventListener('click',async()=>{soundOn=!sou
 
 // On-screen joystick-like touch controls for phones
 let touchStart=null;
-canvas.addEventListener('touchstart',e=>{if(!started)return;touchStart={x:e.touches[0].clientX,y:e.touches[0].clientY}},{passive:true});
+canvas.addEventListener('touchstart',e=>{if(!started||e.touches.length!==1)return;touchStart={x:e.touches[0].clientX,y:e.touches[0].clientY}},{passive:true});
 canvas.addEventListener('touchmove',e=>{if(!touchStart)return;const t=e.touches[0],dx=t.clientX-touchStart.x,dy=t.clientY-touchStart.y;yaw-=dx*.003;pitch=THREE.MathUtils.clamp(pitch+dy*.002,-1.1,1.1);touchStart={x:t.clientX,y:t.clientY}},{passive:true});
-canvas.addEventListener('touchend',()=>touchStart=null);
+canvas.addEventListener('touchend',()=>touchStart=null);canvas.addEventListener('touchcancel',()=>touchStart=null);
 
+
+const celebrationParticles=[];
+function celebrate(){
+ const colors=[0xffd36b,0xff8c69,0xffe9b0,0xe88bd1,0x9dd9b5];
+ const origin=camera.position.clone().add(new THREE.Vector3(-Math.sin(yaw)*5,1.2,-Math.cos(yaw)*5));
+ for(let i=0;i<90;i++){
+  const mesh=new THREE.Mesh(new THREE.SphereGeometry(.045+Math.random()*.045,6,6),new THREE.MeshBasicMaterial({color:colors[i%colors.length]}));
+  mesh.position.copy(origin);scene.add(mesh);
+  const velocity=new THREE.Vector3((Math.random()-.5)*5,Math.random()*5+1,(Math.random()-.5)*5);
+  celebrationParticles.push({mesh,velocity,life:2.8});
+ }
+ // A short, gentle bell-like chime generated locally in the browser.
+ try{
+  audioCtx??=new (window.AudioContext||window.webkitAudioContext)();
+  audioCtx.resume();
+  [523.25,659.25,783.99].forEach((hz,index)=>{
+   const oscBell=audioCtx.createOscillator(),gainBell=audioCtx.createGain();
+   oscBell.type='sine';oscBell.frequency.value=hz;
+   const now=audioCtx.currentTime+index*.12;
+   gainBell.gain.setValueAtTime(.0001,now);
+   gainBell.gain.exponentialRampToValueAtTime(.075,now+.025);
+   gainBell.gain.exponentialRampToValueAtTime(.0001,now+1.1);
+   oscBell.connect(gainBell).connect(audioCtx.destination);
+   oscBell.start(now);oscBell.stop(now+1.15);
+  });
+ }catch(error){console.info('Audio is unavailable; visual celebration still works.',error)}
+ const button=document.querySelector('#celebrate');
+ button.classList.add('celebrating');
+ setTimeout(()=>button.classList.remove('celebrating'),700);
+}
+document.querySelector('#celebrate').addEventListener('click',celebrate);
 const clock=new THREE.Clock();
 function animate(){requestAnimationFrame(animate);const dt=Math.min(clock.getDelta(),.04),t=clock.elapsedTime;
  lamps.forEach(l=>{const flicker=.85+Math.sin(t*8+l.phase)*.12+Math.sin(t*17+l.phase)*.05;l.flame.scale.y=1.8*flicker;l.light.intensity=3.4*flicker});
+ for(let i=celebrationParticles.length-1;i>=0;i--){
+  const p=celebrationParticles[i];p.life-=dt;p.velocity.y-=4.8*dt;p.mesh.position.addScaledVector(p.velocity,dt);
+  p.mesh.material.opacity=Math.max(0,p.life/2.8);p.mesh.material.transparent=true;
+  if(p.life<=0){scene.remove(p.mesh);p.mesh.geometry.dispose();p.mesh.material.dispose();celebrationParticles.splice(i,1)}
+ }
  const p=petals.geometry.attributes.position;for(let i=0;i<petalCount;i++){let y=p.getY(i)-petalSpeeds[i]*dt;if(y<0)y=9+Math.random()*3;p.setY(i,y);p.setX(i,p.getX(i)+Math.sin(t+i)*dt*.16)}p.needsUpdate=true;
  people.forEach(o=>{o.g.rotation.z=Math.sin(t*1.4+o.phase)*.045});
  travelers.forEach(o=>{o.figure.rotation.z=Math.sin(t*1.5+o.phase)*.025});
