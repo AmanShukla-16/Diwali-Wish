@@ -150,8 +150,8 @@ function makeVanara(x,z,index){
  const tailCurve=new THREE.CatmullRomCurve3([new THREE.Vector3(0,.35,-.12),new THREE.Vector3(-.2,.05,-.45),new THREE.Vector3(-.38,.42,-.7),new THREE.Vector3(-.18,.72,-.82)]);
  const tail=new THREE.Mesh(new THREE.TubeGeometry(tailCurve,12,.055,6,false),fur);g.add(tail);vanaraWalkers.push({g,arms,phase:index*.8,tail});return g;
 }
-for(let row=0;row<4;row++)for(const side of [-1,1])makeVanara(side*(3.65+(row%2)*.35),1.8+row*2.05,row+(side===1?4:0));
-const hanuman=new THREE.Group();hanuman.position.set(-3.25,0,1.1);vanaraSena.add(hanuman);
+for(let row=0;row<4;row++)for(const side of [-1,1])makeVanara(side*(3.65+(row%2)*.35),-(1.8+row*2.05),row+(side===1?4:0));
+const hanuman=new THREE.Group();hanuman.position.set(-3.25,0,-1.1);vanaraSena.add(hanuman);
 const hanumanFur=mat(0x9a5937),hanumanCloth=mat(0xd56c2e),hanumanGold=mat(0xe6bd65,.35,.5);
 const hBody=new THREE.Mesh(new THREE.CylinderGeometry(.34,.48,1.45,12),hanumanCloth);hBody.position.y=1.05;hanuman.add(hBody);
 const hChest=new THREE.Mesh(new THREE.SphereGeometry(.38,12,10),hanumanFur);hChest.position.set(0,1.82,0);hChest.scale.set(.9,1.05,.75);hanuman.add(hChest);
@@ -169,7 +169,7 @@ const gadaHead=new THREE.Mesh(new THREE.SphereGeometry(.34,14,12),hanumanGold);g
 const gadaBand=new THREE.Mesh(new THREE.TorusGeometry(.25,.045,8,20),gold);gadaBand.position.y=1.12;gada.add(gadaBand);
 const hTailCurve=new THREE.CatmullRomCurve3([new THREE.Vector3(-.18,.55,-.2),new THREE.Vector3(-.58,.2,-.55),new THREE.Vector3(-.72,.72,-.85),new THREE.Vector3(-.42,1.02,-.95)]);
 hanuman.add(new THREE.Mesh(new THREE.TubeGeometry(hTailCurve,18,.075,8,false),hanumanFur));
-let processionStarted=false,processionProgress=0,returnMomentShown=false;
+let processionStarted=false,processionProgress=0,processionStartZ=-14,returnMomentShown=false;
 const processionGlow=new THREE.PointLight(0xffd18a,18,24);processionGlow.position.set(0,4.2,1.5);chariot.add(processionGlow);
 
 const carpet=new THREE.Mesh(new THREE.PlaneGeometry(5.2,150),mat(0x92243a,.8));carpet.rotation.x=-Math.PI/2;carpet.position.set(0,.035,-61);scene.add(carpet);
@@ -259,8 +259,8 @@ function animate(){
  travelers.forEach(o=>{o.figure.rotation.z=Math.sin(t*1.35+o.phase)*.018;o.figure.position.y=1.18+Math.sin(t*2+o.phase)*.025});
  vanaraWalkers.forEach(o=>{if(!o.g||!o.arms||o.arms.length<2)return;o.g.position.y=Math.abs(Math.sin(t*3+o.phase))*.045;o.arms[0].rotation.x=Math.sin(t*3+o.phase)*.18;o.arms[1].rotation.x=-.35+Math.sin(t*3+o.phase+1)*.18;o.g.rotation.y=Math.sin(t*1.7+o.phase)*.035});
  hArms[0].rotation.z=-.25+Math.sin(t*2.4)*.12;hArms[1].rotation.z=.18+Math.sin(t*2.4+1)*.1;hanuman.rotation.y=Math.sin(t*1.1)*.035;
- if(started&&!processionStarted&&camera.position.z<-5){processionStarted=true;processionProgress=0;chariot.position.set(0,0,camera.position.z-5);vanaraSena.position.set(0,0,camera.position.z-5);chariot.rotation.y=Math.PI;vanaraSena.rotation.y=Math.PI;}
- if(processionStarted&&processionProgress<1){processionProgress=Math.min(1,processionProgress+dt*.045);const ease=processionProgress*processionProgress*(3-2*processionProgress);chariot.position.z=-10-70*ease;vanaraSena.position.z=chariot.position.z;chariot.position.y=Math.sin(t*2)*.035;processionGlow.intensity=18+Math.sin(t*5)*3;if(processionProgress>=1&&!returnMomentShown){returnMomentShown=true;document.querySelector('#returnMoment').classList.remove('hidden');setTimeout(()=>document.querySelector('#returnMoment')?.classList.add('hidden'),6500)}}
+ if(started&&!processionStarted&&camera.position.z<-5){processionStarted=true;processionProgress=0;processionStartZ=camera.position.z-9;chariot.position.set(0,0,processionStartZ);vanaraSena.position.set(0,0,processionStartZ);chariot.rotation.y=Math.PI;vanaraSena.rotation.y=Math.PI;}
+ if(processionStarted&&processionProgress<1){processionProgress=Math.min(1,processionProgress+dt*.035);const ease=processionProgress*processionProgress*(3-2*processionProgress);chariot.position.z=processionStartZ+(-79-processionStartZ)*ease;vanaraSena.position.z=chariot.position.z;chariot.position.y=Math.sin(t*2)*.035;processionGlow.intensity=18+Math.sin(t*5)*3;if(processionProgress>=1&&!returnMomentShown){returnMomentShown=true;document.querySelector('#returnMoment').classList.remove('hidden');setTimeout(()=>document.querySelector('#returnMoment')?.classList.add('hidden'),6500)}}
  if(started){camera.rotation.order='YXZ';camera.rotation.y=yaw;camera.rotation.x=pitch;const forward=new THREE.Vector3(-Math.sin(yaw),0,-Math.cos(yaw)),right=new THREE.Vector3(Math.cos(yaw),0,-Math.sin(yaw)),input=new THREE.Vector3();if(move.w)input.add(forward);if(move.s)input.sub(forward);if(move.d)input.add(right);if(move.a)input.sub(right);if(input.lengthSq())input.normalize();if(!processionStarted||processionProgress>=1)camera.position.addScaledVector(input,dt*5.2);camera.position.x=THREE.MathUtils.clamp(camera.position.x,-5.1,5.1);camera.position.z=THREE.MathUtils.clamp(camera.position.z,-120,12);camera.position.y=2.1;if(camera.position.z < -104){wish.classList.remove('hidden');document.exitPointerLock?.()}}
  renderer.render(scene,camera);
 }
