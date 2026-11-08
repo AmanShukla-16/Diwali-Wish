@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#10091d" />
+  <meta name="description" content="Step into the lights of ancient Ayodhya and celebrate the return of Shri Ram." />
+  <title>Diwali — The Return to Ayodhya</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Hind:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+  <div id="experience">
+    <canvas id="world" aria-label="Interactive 3D view of an ancient festive city"></canvas>
+    <div class="vignette"></div>
+    <header class="topbar"><span class="brand">✦ दीपोत्सव ✦</span><span class="top-note">A JOURNEY TO ANCIENT AYODHYA</span></header>
+    <section class="intro" id="intro">
+      <p class="eyebrow">A night remembered through generations</p>
+      <h1>The Return<br><em>to Ayodhya</em></h1>
+      <p class="intro-copy">Fourteen years had passed. Tonight, a kingdom would welcome its beloved prince home, lighting every path with hope.</p>
+      <button id="enter" class="gold-button">ENTER THE CITY <span>→</span></button>
+      <p class="hint">An immersive Diwali experience · Best with headphones</p>
+    </section>
+    <div class="hud hidden" id="hud">
+      <div class="hud-title">AYODHYA · THE NIGHT OF LIGHTS</div>
+      <div class="hud-help"><span><b>W A S D</b> Walk</span><span><b>MOUSE</b> Look around</span><span><b>ESC</b> Release view</span></div>
+      <button id="sound" class="sound-button" aria-label="Toggle ambient sound">♫ Sound: Off</button>
+    </div>
+    <div class="welcome hidden" id="welcome">
+      <p class="eyebrow">दीपों से जगमगाती अयोध्या</p>
+      <h2>Welcome to Ayodhya</h2>
+      <p>Walk through the streets. Take in the lights. Be part of a celebration of hope, devotion and homecoming.</p>
+      <button id="explore" class="text-button">EXPLORE THE CITY ↓</button>
+    </div>
+    <div class="wish hidden" id="wish">
+      <div class="wish-card">
+        <div class="wish-flame">🪔</div>
+        <p class="eyebrow">May light always find its way to you</p>
+        <h2>शुभ दीपावली</h2>
+        <p>May the light of this sacred celebration fill your life with peace, courage, happiness and prosperity.</p>
+        <p class="signoff">With warm wishes · Aman</p>
+        <button id="again" class="gold-button">EXPERIENCE AGAIN ↗</button>
+      </div>
+    </div>
+    <div class="crosshair hidden" id="crosshair">+</div>
+    <div class="footer-note">A respectful artistic interpretation inspired by the Ramayana</div>
+  </div>
+  <script type="module" src="./script.js"></script>
+</body>
+</html>
