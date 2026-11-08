@@ -184,14 +184,34 @@ for(let i=0;i<96;i++){const side=i%2?1:-1,row=Math.floor(i/2),z=3-row*1.65,x=sid
 let started=false,locked=false,move={w:false,a:false,s:false,d:false,arrowup:false,arrowdown:false,arrowleft:false,arrowright:false},yaw=0,pitch=0,soundOn=false,audioCtx=null,osc=null;
 const intro=document.querySelector('#intro'),hud=document.querySelector('#hud'),welcome=document.querySelector('#welcome'),cross=document.querySelector('#crosshair'),wish=document.querySelector('#wish'),enter=document.querySelector('#enter');
 const landing=document.querySelector('#landing');
-document.querySelector('#beginJourney').addEventListener('click',()=>{
- const startButton=document.querySelector('#beginJourney');
- if(startButton.disabled) return;
- startButton.disabled=true;
- landing.style.display='none';
- enter.click();
-});
-enter.addEventListener('click',()=>{started=true;intro.classList.add('hidden');hud.classList.remove('hidden');welcome.classList.remove('hidden');document.querySelector('#movePad').classList.remove('hidden');if(matchMedia('(pointer: coarse)').matches)document.querySelector('#mobileTip').classList.remove('hidden');canvas.requestPointerLock?.()});
+function startExperience(){
+ if(started) return;
+ started=true;
+ landing.classList.add('landing-exit');
+ intro.classList.add('hidden');
+ hud.classList.remove('hidden');
+ welcome.classList.remove('hidden');
+ document.querySelector('#movePad').classList.remove('hidden');
+ if(matchMedia('(pointer: coarse)').matches)document.querySelector('#mobileTip').classList.remove('hidden');
+ // Request pointer lock directly during the user's click, preserving browser activation.
+ try{canvas.requestPointerLock?.()}catch(error){console.info('Pointer lock unavailable; use touch or movement controls.',error)}
+}
+document.querySelector('#beginJourney').addEventListener('click',startExperience);
+enter.addEventListener('click',startExperience);
+
+// Automatic cinematic Ramayana TV slideshow.
+const tvSlides=[...document.querySelectorAll('.tv-slide')];
+const tvDots=[...document.querySelectorAll('.tv-dots span')];
+const tvTitle=document.querySelector('#tvTitle'),tvCaption=document.querySelector('#tvCaption');
+let tvIndex=0;
+function showTvSlide(index){
+ tvIndex=index;
+ tvSlides.forEach((slide,i)=>slide.classList.toggle('active',i===index));
+ tvDots.forEach((dot,i)=>dot.classList.toggle('active',i===index));
+ tvTitle.textContent=tvSlides[index].dataset.title;
+ tvCaption.textContent=tvSlides[index].dataset.caption;
+}
+if(tvSlides.length){showTvSlide(0);setInterval(()=>{if(!started)showTvSlide((tvIndex+1)%tvSlides.length)},5600)}
 document.addEventListener('pointerlockchange',()=>{locked=document.pointerLockElement===canvas;cross.classList.toggle('hidden',!locked)});
 document.addEventListener('mousemove',e=>{if(!locked)return;yaw-=e.movementX*.0022;pitch=THREE.MathUtils.clamp(pitch-e.movementY*.0018,-1.15,1.15)});
 function movementKey(key){const k=key.toLowerCase();return ({w:'w',arrowup:'w',s:'s',arrowdown:'s',a:'a',arrowleft:'a',d:'d',arrowright:'d'})[k]||null}
