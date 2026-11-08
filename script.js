@@ -188,6 +188,7 @@ const landing=document.querySelector('#landing');
 function startExperience(){
  if(started) return;
  started=true;
+ document.body.classList.add('game-active');
  landing.classList.add('landing-exit');
  intro.classList.add('hidden');
  hud.classList.remove('hidden');
@@ -236,7 +237,18 @@ function movementKey(key){const k=key.toLowerCase();return ({w:'w',arrowup:'w',s
 window.addEventListener('keydown',e=>{const k=movementKey(e.key);if(k){move[k]=true;e.preventDefault()}});
 window.addEventListener('keyup',e=>{const k=movementKey(e.key);if(k)move[k]=false});
 window.addEventListener('blur',()=>{Object.keys(move).forEach(k=>move[k]=false)});
-document.querySelectorAll('[data-move]').forEach(button=>{const key=button.dataset.move,down=e=>{e.preventDefault();button.setPointerCapture?.(e.pointerId);move[key]=true;button.classList.add('pressed')},up=e=>{e.preventDefault();move[key]=false;button.classList.remove('pressed')};button.addEventListener('pointerdown',down);['pointerup','pointerleave','pointercancel'].forEach(type=>button.addEventListener(type,up))});
+document.querySelectorAll('[data-move]').forEach(button=>{
+ const key=button.dataset.move;
+ const press=e=>{e.preventDefault();move[key]=true;button.classList.add('pressed');try{button.setPointerCapture(e.pointerId)}catch(_){}};
+ const release=e=>{if(e)e.preventDefault();move[key]=false;button.classList.remove('pressed')};
+ button.addEventListener('pointerdown',press,{passive:false});
+ button.addEventListener('pointerup',release,{passive:false});
+ button.addEventListener('pointercancel',release,{passive:false});
+ button.addEventListener('lostpointercapture',release);
+ button.addEventListener('contextmenu',e=>e.preventDefault());
+});
+window.addEventListener('pointerup',()=>{document.querySelectorAll('[data-move].pressed').forEach(button=>{move[button.dataset.move]=false;button.classList.remove('pressed')})});
+window.addEventListener('blur',()=>document.querySelectorAll('[data-move].pressed').forEach(button=>{move[button.dataset.move]=false;button.classList.remove('pressed')}));
 document.querySelector('#explore').addEventListener('click',()=>{welcome.classList.add('hidden');canvas.requestPointerLock?.()});
 document.querySelector('#again').addEventListener('click',()=>location.reload());
 document.querySelector('#sound').addEventListener('click',async()=>{soundOn=!soundOn;document.querySelector('#sound').textContent='♫ Sound: '+(soundOn?'On':'Off');if(soundOn){audioCtx??=new(window.AudioContext||window.webkitAudioContext)();await audioCtx.resume();if(!osc){osc=audioCtx.createOscillator();const gain=audioCtx.createGain();osc.type='sine';osc.frequency.value=110;gain.gain.value=.018;osc.connect(gain).connect(audioCtx.destination);osc.start()}}else if(audioCtx)await audioCtx.suspend()});
