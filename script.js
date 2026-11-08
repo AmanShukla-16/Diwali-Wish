@@ -82,24 +82,31 @@ scene.add(new THREE.Points(starsGeo,new THREE.PointsMaterial({color:0xffe6b5,siz
 
 // A distant ceremonial chariot silhouette on the avenue, kept symbolic and non-photoreal
 const chariot=new THREE.Group();scene.add(chariot);chariot.position.set(0,0,-47);
-box(3.8,.65,2.1,gold,0,1.2,0,chariot);box(2.3,1.7,1.7,roof,0,2.25,-.1,chariot);
+// Open ceremonial platform: remove the tall cabin hiding the figures.
+box(3.8,.42,2.1,gold,0,.58,0,chariot);
+box(3.25,.22,.18,roof,0,1.02,1.0,chariot);
+for(const x of [-1.55,1.55])for(const z of [-.72,.72])box(.12,.65,.12,gold,x,1.28,z,chariot);
 for(let x of [-1.35,1.35]){const wheel=new THREE.Mesh(new THREE.TorusGeometry(.55,.12,10,24),gold);wheel.position.set(x,.65,.85);chariot.add(wheel)}
-const canopy=new THREE.Mesh(new THREE.ConeGeometry(1.65,1.8,4),roof);canopy.position.set(0,4,-.1);canopy.rotation.y=Math.PI/4;chariot.add(canopy);
+const canopy=new THREE.Mesh(new THREE.ConeGeometry(1.65,1.8,4),roof);canopy.position.set(0,5.65,-.1);canopy.rotation.y=Math.PI/4;chariot.add(canopy);
 const halo=new THREE.PointLight(0xffbd65,16,16);halo.position.set(0,4,0);chariot.add(halo);
 // Three symbolic, respectfully stylized figures representing the homecoming
 const travelers=[];
 function addTraveler(x,robeColor,crownColor,scale=1){
- const figure=new THREE.Group();figure.position.set(x,2.15,0);figure.scale.setScalar(scale);chariot.add(figure);
+ const figure=new THREE.Group();figure.position.set(x,1.18,0);figure.scale.setScalar(scale);chariot.add(figure);
  const robeMat=mat(robeColor,.72),skin=mat(0x9b694c),crownMat=mat(crownColor,.35,.45);
  const body=new THREE.Mesh(new THREE.CylinderGeometry(.28,.42,1.35,12),robeMat);body.position.y=.65;figure.add(body);
  const head=new THREE.Mesh(new THREE.SphereGeometry(.27,16,12),skin);head.position.y=1.55;figure.add(head);
  const crown=new THREE.Mesh(new THREE.ConeGeometry(.28,.55,5),crownMat);crown.position.y=1.98;figure.add(crown);
+ const eyeMat=mat(0x211714,.5);
+ const eyeL=new THREE.Mesh(new THREE.SphereGeometry(.045,8,8),eyeMat);
+ const eyeR=eyeL.clone();eyeL.position.set(-.095,1.59,.235);eyeR.position.set(.095,1.59,.235);figure.add(eyeL,eyeR);
+ const tilak=new THREE.Mesh(new THREE.BoxGeometry(.045,.17,.025),mat(0xffe2a0));tilak.position.set(0,1.77,.255);figure.add(tilak);
  const haloRing=new THREE.Mesh(new THREE.TorusGeometry(.43,.045,8,32),gold);haloRing.position.set(0,1.62,-.18);figure.add(haloRing);
  travelers.push({figure,phase:Math.random()*6});
 }
-addTraveler(-.78,0x315a79,0xe8bd62,.92);
-addTraveler(0,0x9b3e38,0xf2d28a,1.02);
-addTraveler(.78,0x315a79,0xe8bd62,.92);
+addTraveler(-.82,0x315a79,0xe8bd62,1.02); // Lakshman
+addTraveler(0,0x9b3e38,0xf2d28a,1.08); // Shri Ram
+addTraveler(.82,0xb34f75,0xf2d28a,1.02); // Sita
 
 /* Vanara sena and Hanuman accompany the homecoming procession.
    These are stylized, respectful low-poly characters built from Three.js primitives. */
@@ -241,7 +248,7 @@ function animate(){requestAnimationFrame(animate);const dt=Math.min(clock.getDel
  if(processionStarted&&processionProgress<1){
   processionProgress=Math.min(1,processionProgress+dt*.075);
   const ease=processionProgress*processionProgress*(3-2*processionProgress);
-  chariot.position.z=-47+34*ease; // The homecoming procession advances toward and past the viewer
+  chariot.position.z=-47+29*ease; // The homecoming procession advances toward the viewer along +Z
   vanaraSena.position.z=chariot.position.z;
   chariot.position.y=Math.sin(t*2)*.035;
   processionGlow.intensity=24+Math.sin(t*5)*4;
