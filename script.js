@@ -186,7 +186,7 @@ function animate(){requestAnimationFrame(animate);const dt=Math.min(clock.getDel
  if(processionStarted&&processionProgress<1){
   processionProgress=Math.min(1,processionProgress+dt*.075);
   const ease=processionProgress*processionProgress*(3-2*processionProgress);
-  chariot.position.z=-47+16*ease; // The homecoming procession advances toward the viewer
+  chariot.position.z=-47+34*ease; // The homecoming procession advances toward and past the viewer
   chariot.position.y=Math.sin(t*2)*.035;
   processionGlow.intensity=24+Math.sin(t*5)*4;
   lamps.forEach(l=>{if(Math.abs(l.light.position.z-camera.position.z)<18)l.light.intensity=5.2});
@@ -204,7 +204,7 @@ function animate(){requestAnimationFrame(animate);const dt=Math.min(clock.getDel
   if(move.w)input.add(forward);if(move.s)input.sub(forward);
   if(move.d)input.add(right);if(move.a)input.sub(right);
   if(input.lengthSq())input.normalize();
-  camera.position.addScaledVector(input,dt*5.2);camera.position.x=THREE.MathUtils.clamp(camera.position.x,-5.1,5.1);camera.position.z=THREE.MathUtils.clamp(camera.position.z,-120,12);camera.position.y=2.1;
+  if(!processionStarted||processionProgress>=1){camera.position.addScaledVector(input,dt*5.2)}camera.position.x=THREE.MathUtils.clamp(camera.position.x,-5.1,5.1);camera.position.z=THREE.MathUtils.clamp(camera.position.z,-120,12);camera.position.y=2.1;
   if(camera.position.z < -104){wish.classList.remove('hidden');document.exitPointerLock?.()}
  }
  renderer.render(scene,camera)}
