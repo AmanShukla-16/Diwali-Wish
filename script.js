@@ -86,6 +86,22 @@ box(3.8,.65,2.1,gold,0,1.2,0,chariot);box(2.3,1.7,1.7,roof,0,2.25,-.1,chariot);
 for(let x of [-1.35,1.35]){const wheel=new THREE.Mesh(new THREE.TorusGeometry(.55,.12,10,24),gold);wheel.position.set(x,.65,.85);chariot.add(wheel)}
 const canopy=new THREE.Mesh(new THREE.ConeGeometry(1.65,1.8,4),roof);canopy.position.set(0,4,-.1);canopy.rotation.y=Math.PI/4;chariot.add(canopy);
 const halo=new THREE.PointLight(0xffbd65,16,16);halo.position.set(0,4,0);chariot.add(halo);
+// Three symbolic, respectfully stylized figures representing the homecoming
+const travelers=[];
+function addTraveler(x,robeColor,crownColor,scale=1){
+ const figure=new THREE.Group();figure.position.set(x,2.15,0);figure.scale.setScalar(scale);chariot.add(figure);
+ const robeMat=mat(robeColor,.72),skin=mat(0x9b694c),crownMat=mat(crownColor,.35,.45);
+ const body=new THREE.Mesh(new THREE.CylinderGeometry(.28,.42,1.35,12),robeMat);body.position.y=.65;figure.add(body);
+ const head=new THREE.Mesh(new THREE.SphereGeometry(.27,16,12),skin);head.position.y=1.55;figure.add(head);
+ const crown=new THREE.Mesh(new THREE.ConeGeometry(.28,.55,5),crownMat);crown.position.y=1.98;figure.add(crown);
+ const haloRing=new THREE.Mesh(new THREE.TorusGeometry(.43,.045,8,32),gold);haloRing.position.set(0,1.62,-.18);figure.add(haloRing);
+ travelers.push({figure,phase:Math.random()*6});
+}
+addTraveler(-.78,0x315a79,0xe8bd62,.92);
+addTraveler(0,0x9b3e38,0xf2d28a,1.02);
+addTraveler(.78,0x315a79,0xe8bd62,.92);
+const processionGlow=new THREE.PointLight(0xffd18a,24,24);processionGlow.position.set(0,4.2,1.5);chariot.add(processionGlow);
+let processionStarted=false,processionProgress=0;
 
 // Simple silhouettes of welcoming townspeople along the route
 const people=[];
@@ -121,7 +137,22 @@ function animate(){requestAnimationFrame(animate);const t=clock.getElapsedTime()
  lamps.forEach(l=>{const flicker=.85+Math.sin(t*8+l.phase)*.12+Math.sin(t*17+l.phase)*.05;l.flame.scale.y=1.8*flicker;l.light.intensity=3.4*flicker});
  const p=petals.geometry.attributes.position;for(let i=0;i<petalCount;i++){let y=p.getY(i)-petalSpeeds[i]*dt;if(y<0)y=9+Math.random()*3;p.setY(i,y);p.setX(i,p.getX(i)+Math.sin(t+i)*dt*.16)}p.needsUpdate=true;
  people.forEach(o=>{o.g.rotation.z=Math.sin(t*1.4+o.phase)*.045});
- if(started){camera.rotation.order='YXZ';camera.rotation.y=yaw;camera.rotation.x=pitch;
+ travelers.forEach(o=>{o.figure.rotation.z=Math.sin(t*1.5+o.phase)*.025});
+ if(processionStarted&&processionProgress<1){
+  processionProgress=Math.min(1,processionProgress+dt*.075);
+  const ease=processionProgress*processionProgress*(3-2*processionProgress);
+  chariot.position.z=-47-13*ease;
+  chariot.position.y=Math.sin(t*2)*.035;
+  processionGlow.intensity=24+Math.sin(t*5)*4;
+  lamps.forEach(l=>{if(Math.abs(l.light.position.z-camera.position.z)<18)l.light.intensity=5.2});
+ }
+ if(started){
+  if(!processionStarted&&camera.position.z < -22){
+   processionStarted=true;
+   document.querySelector('#returnMoment').classList.remove('hidden');
+   setTimeout(()=>document.querySelector('#returnMoment')?.classList.add('hidden'),6500);
+  }
+  camera.rotation.order='YXZ';camera.rotation.y=yaw;camera.rotation.x=pitch;
   const dir=new THREE.Vector3();camera.getWorldDirection(dir);dir.y=0;dir.normalize();const right=new THREE.Vector3().crossVectors(dir,new THREE.Vector3(0,1,0)).normalize();
   const input=new THREE.Vector3();if(move.w)input.add(dir);if(move.s)input.sub(dir);if(move.d)input.add(right);if(move.a)input.sub(right);if(input.lengthSq())input.normalize();
   camera.position.addScaledVector(input,dt*5.2);camera.position.x=THREE.MathUtils.clamp(camera.position.x,-5.1,5.1);camera.position.z=THREE.MathUtils.clamp(camera.position.z,-120,12);camera.position.y=2.1;
