@@ -133,7 +133,7 @@ canvas.addEventListener('touchmove',e=>{if(!touchStart)return;const t=e.touches[
 canvas.addEventListener('touchend',()=>touchStart=null);
 
 const clock=new THREE.Clock();
-function animate(){requestAnimationFrame(animate);const t=clock.getElapsedTime(),dt=Math.min(clock.getDelta(),.04);
+function animate(){requestAnimationFrame(animate);const dt=Math.min(clock.getDelta(),.04),t=clock.elapsedTime;
  lamps.forEach(l=>{const flicker=.85+Math.sin(t*8+l.phase)*.12+Math.sin(t*17+l.phase)*.05;l.flame.scale.y=1.8*flicker;l.light.intensity=3.4*flicker});
  const p=petals.geometry.attributes.position;for(let i=0;i<petalCount;i++){let y=p.getY(i)-petalSpeeds[i]*dt;if(y<0)y=9+Math.random()*3;p.setY(i,y);p.setX(i,p.getX(i)+Math.sin(t+i)*dt*.16)}p.needsUpdate=true;
  people.forEach(o=>{o.g.rotation.z=Math.sin(t*1.4+o.phase)*.045});
